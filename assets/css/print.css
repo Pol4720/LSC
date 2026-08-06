@@ -1,0 +1,44 @@
+/* =========================================================================
+   LSC · Print styles — turns any screen into a clean handout / PDF
+   ========================================================================= */
+
+@page { margin: 16mm; }
+
+body {
+  background: #fff !important;
+  color: #000 !important;
+  font-size: 11pt;
+}
+
+.app-header, .form-nav, .stepper, .progress-bar, .side, .console-top,
+.toasts, .modal-backdrop, .confetti, .site-foot, .tabs, .selection-bar,
+.btn, button, input[type="range"], .drop-zone, .side-scrim, .filters-row,
+.chart-tip { display: none !important; }
+
+.console-shell { display: block !important; }
+.form-main, .console-body { padding: 0 !important; }
+.form-wrap, .container { max-width: none !important; padding: 0 !important; }
+
+.card, .client-card, .stat-tile, .kan-col {
+  background: #fff !important;
+  border: 1px solid #ccc !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  break-inside: avoid;
+}
+
+.summary-group, .note-item, .lot-card, .estimate-card { break-inside: avoid; }
+
+.summary-item { grid-template-columns: 34% 1fr !important; }
+.summary-item dt { color: #444 !important; }
+
+a[href^="http"]::after {
+  content: " (" attr(href) ")";
+  font-size: 9pt;
+  color: #555;
+  word-break: break-all;
+}
+
+h1, h2, h3, h4 { break-after: avoid; }
+.sr-only { position: static !important; width: auto !important; height: auto !important; clip: auto !important; }
+.sr-only.sr-only { display: none; } /* keep the a11y tables out of the printout */

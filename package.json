@@ -1,0 +1,19 @@
+{
+  "name": "lsc",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "La Subasta Cubana · client intake form and advisor console",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "test": "node --test \"tests/unit/**/*.test.mjs\"",
+    "test:e2e": "playwright test",
+    "check": "node scripts/check.mjs && node scripts/check-encrypted.mjs",
+    "index": "node scripts/build-index.mjs",
+    "verify": "npm run check && npm test && npm run test:e2e"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
+  },
+  "engines": { "node": ">=20" }
+}
