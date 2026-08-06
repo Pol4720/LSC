@@ -273,3 +273,160 @@
 .site-foot { padding: var(--sp-5); border-top: 1px solid var(--border); margin-top: auto; }
 .site-foot a:hover { color: var(--text); }
 .field-row { display: grid; gap: var(--sp-3); grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+
+/* =========================================================================
+   Platform launcher — floating access to every site the advisor uses
+   ========================================================================= */
+.launcher {
+  position: fixed;
+  right: max(var(--sp-5), env(safe-area-inset-right));
+  bottom: max(var(--sp-5), env(safe-area-inset-bottom));
+  z-index: 700;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--sp-3);
+}
+
+.launcher-fab {
+  display: inline-flex; align-items: center; gap: var(--sp-2);
+  height: 52px; padding: 0 20px;
+  border-radius: var(--r-full);
+  background: linear-gradient(180deg, var(--c-gold-400), var(--c-gold-500));
+  color: #2a1c05;
+  font-weight: 750; font-size: var(--fs-base);
+  border: 1px solid transparent;
+  box-shadow: 0 10px 28px rgba(209, 137, 42, 0.38), var(--shadow-md);
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  order: 2;
+}
+.launcher-fab:hover { transform: translateY(-2px); box-shadow: 0 16px 38px rgba(209, 137, 42, 0.46); }
+.launcher-fab:active { transform: translateY(0); }
+.launcher-fab svg { width: 20px; height: 20px; stroke-width: 2.1; }
+.launcher-fab[aria-expanded="true"] {
+  background: var(--surface-solid);
+  color: var(--text);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+}
+@media (max-width: 560px) {
+  .launcher-fab { height: 48px; padding: 0; width: 48px; justify-content: center; }
+  .launcher-fab-text { display: none; }
+}
+
+.launcher-panel {
+  order: 1;
+  width: min(408px, calc(100vw - 2 * var(--sp-4)));
+  max-height: min(620px, calc(100dvh - 140px));
+  display: flex; flex-direction: column;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  animation: launcherIn 240ms var(--ease);
+}
+@keyframes launcherIn {
+  from { opacity: 0; transform: translateY(14px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+
+.launcher-head {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-4) var(--sp-3);
+  border-bottom: 1px solid var(--border);
+}
+
+.launcher-search-wrap {
+  position: relative; display: flex; align-items: center;
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--border);
+}
+.launcher-search-wrap > svg {
+  position: absolute; left: calc(var(--sp-4) + 12px);
+  color: var(--text-subtle); pointer-events: none;
+}
+.launcher-search { padding-left: 38px; height: 40px; min-height: 40px; }
+
+.launcher-list { overflow-y: auto; padding: var(--sp-2) var(--sp-2) var(--sp-3); flex: 1; }
+
+.launcher-group {
+  display: flex; align-items: center; gap: 7px;
+  padding: var(--sp-3) var(--sp-3) var(--sp-2);
+  font-size: var(--fs-xs); font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  color: var(--text-subtle);
+}
+.launcher-group svg { width: 14px; height: 14px; }
+
+.launcher-context {
+  display: flex; align-items: center; gap: 8px;
+  margin: var(--sp-2);
+  padding: 8px 12px;
+  border-radius: var(--r-sm);
+  background: var(--brand-soft);
+  font-size: var(--fs-xs); font-weight: 650;
+}
+.launcher-context svg { width: 14px; height: 14px; }
+
+.launcher-item {
+  display: flex; align-items: center; gap: var(--sp-3);
+  padding: 9px var(--sp-3);
+  border-radius: var(--r-sm);
+  text-decoration: none; color: inherit;
+  transition: background-color 130ms linear;
+}
+.launcher-item:hover, .launcher-item:focus-visible { background: var(--surface-hover); }
+.launcher-item:focus-visible { outline: 2px solid var(--border-focus); outline-offset: -2px; }
+
+.launcher-mark {
+  width: 36px; height: 36px; flex: none;
+  border-radius: 10px;
+  display: grid; place-items: center;
+  font-size: 11px; font-weight: 900; letter-spacing: 0.02em;
+  box-shadow: var(--shadow-xs);
+}
+.launcher-body { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }
+.launcher-name { display: flex; align-items: center; gap: 7px; font-weight: 650; font-size: var(--fs-base); }
+.launcher-desc {
+  font-size: var(--fs-xs); color: var(--text-muted); line-height: 1.4;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.launcher-go { color: var(--text-subtle); opacity: 0; transition: opacity 130ms linear; }
+.launcher-item:hover .launcher-go, .launcher-item:focus-visible .launcher-go { opacity: 1; }
+
+.launcher-foot {
+  padding: 8px var(--sp-4);
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+/* ---- Inline strip used inside the client's target-lots tab --------------- */
+.platform-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 5px 12px 5px 5px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  font-size: var(--fs-sm); font-weight: 650;
+  text-decoration: none; color: inherit;
+  transition: all 150ms var(--ease);
+}
+.platform-chip:hover { border-color: var(--brand); transform: translateY(-1px); box-shadow: var(--shadow-xs); }
+.platform-chip-mark {
+  width: 24px; height: 24px; flex: none;
+  border-radius: 7px;
+  display: grid; place-items: center;
+  font-size: 9px; font-weight: 900;
+}
+
+@media print { .launcher { display: none !important; } }
+
+.side-kbd {
+  font-family: var(--font-mono);
+  font-size: 10px; font-weight: 700;
+  padding: 2px 6px; border-radius: 5px;
+  background: var(--bg-sunken);
+  border: 1px solid var(--border);
+  color: var(--text-subtle);
+}

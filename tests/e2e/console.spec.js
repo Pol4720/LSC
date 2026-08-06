@@ -289,6 +289,109 @@ test('an already-unlocked console imports a link without asking again', async ({
   await expect(page.locator('.client-card')).toContainText('Import En Vivo');
 });
 
+test('the platform launcher opens, filters and links out', async ({ page }) => {
+  await setUp(page);
+
+  const fab = page.locator('.launcher-fab');
+  await expect(fab).toBeVisible();
+  await expect(page.locator('.launcher-panel')).toHaveCount(0);
+
+  await fab.click();
+  await expect(page.locator('.launcher-panel')).toBeVisible();
+  await expect(fab).toHaveAttribute('aria-expanded', 'true');
+
+  // Every platform group and the sites named in the brief are reachable.
+  await expect(page.locator('.launcher-group')).toHaveCount(4);
+  for (const name of ['Copart', 'IAA (IAAI)', 'Manheim', 'ACV Auctions',
+                      'bid.cars', 'AutoAstat', 'Carfax', 'Super Dispatch', 'La Subasta Cubana']) {
+    await expect(page.locator('.launcher-name', { hasText: name }).first()).toBeVisible();
+  }
+
+  // Links go out to the real sites, in a new tab, with a safe rel.
+  const copart = page.locator('.launcher-item').filter({ hasText: 'Copart' }).first();
+  await expect(copart).toHaveAttribute('href', 'https://www.copart.com/');
+  await expect(copart).toHaveAttribute('target', '_blank');
+  await expect(copart).toHaveAttribute('rel', /noopener/);
+
+  // Filtering narrows the list — descriptions count too, so AutoCheck
+  // ("alternative to Carfax") legitimately survives a "carfax" query.
+  await page.locator('.launcher-search').fill('carfax');
+  await expect(page.locator('.launcher-item').filter({ hasText: 'Carfax' }).first()).toBeVisible();
+  await expect(page.locator('.launcher-item').filter({ hasText: 'Copart' })).toHaveCount(0);
+  await page.locator('.launcher-search').fill('super dispatch');
+  await expect(page.locator('.launcher-item')).toHaveCount(2);
+  await page.locator('.launcher-search').fill('zzzz');
+  await expect(page.locator('.launcher-list')).toContainText('Ninguna plataforma');
+
+  // Escape closes it.
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.launcher-panel')).toHaveCount(0);
+  await expect(fab).toHaveAttribute('aria-expanded', 'false');
+});
+
+test('the P shortcut and the sidebar entry both open the launcher', async ({ page }) => {
+  await setUp(page);
+
+  await page.keyboard.press('p');
+  await expect(page.locator('.launcher-panel')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.launcher-panel')).toHaveCount(0);
+
+  await nav(page, 'Plataformas');
+  await expect(page.locator('.launcher-panel')).toBeVisible();
+});
+
+test('typing in a field never triggers the P shortcut', async ({ page }) => {
+  await setUp(page);
+  await page.locator('.search-box input').fill('pepe');
+  await expect(page.locator('.launcher-panel')).toHaveCount(0);
+  await expect(page.locator('.search-box input')).toHaveValue('pepe');
+});
+
+test('launcher links deep-link to the open client', async ({ page }) => {
+  await setUp(page);
+  await importSealedRecord(page);
+  await page.locator('#pp').fill(PASS);
+  await page.getByRole('button', { name: 'Desbloquear' }).click();
+  await nav(page, 'Clientes');
+  await page.locator('.client-card').first().click();
+  await expect(page.locator('.detail-head h1')).toBeVisible();
+
+  await page.locator('.launcher-fab').click();
+  await expect(page.locator('.launcher-context')).toContainText('Cliente de Prueba');
+  await expect(page.locator('.launcher-item').filter({ hasText: 'Copart' }).first())
+    .toHaveAttribute('href', /query=Toyota%20RAV4/);
+  await page.keyboard.press('Escape');
+
+  // The target-lots tab carries the same links inline.
+  await page.locator('.tab', { hasText: 'Lotes objetivo' }).click();
+  await expect(page.locator('.platform-chip').filter({ hasText: 'Super Dispatch' }).first()).toBeVisible();
+  await expect(page.locator('.platform-chip').filter({ hasText: 'Carfax' }).first())
+    .toHaveAttribute('href', 'https://www.carfax.com/');
+});
+
+test('a lot VIN upgrades the launcher links to VIN lookups', async ({ page }) => {
+  await setUp(page);
+  await importSealedRecord(page);
+  await page.locator('#pp').fill(PASS);
+  await page.getByRole('button', { name: 'Desbloquear' }).click();
+  await nav(page, 'Clientes');
+  await page.locator('.client-card').first().click();
+  await page.locator('.tab', { hasText: 'Lotes objetivo' }).click();
+
+  await page.locator('.card', { hasText: 'Añadir un lote' }).locator('input').first()
+    .fill('https://www.copart.com/lot/58123456/2019-honda-civic-2HGFC2F59JH542514');
+  await page.getByRole('button', { name: 'Añadir' }).click();
+  await expect(page.locator('.card', { hasText: 'Tu selección' })).toContainText('2HGFC2F59JH542514');
+
+  await expect(page.locator('.platform-chip').filter({ hasText: 'Carfax' }).first())
+    .toHaveAttribute('href', /vin=2HGFC2F59JH542514/);
+
+  await page.locator('.launcher-fab').click();
+  await expect(page.locator('.launcher-item').filter({ hasText: 'Carfax' }).first())
+    .toHaveAttribute('href', /vin=2HGFC2F59JH542514/);
+});
+
 test('the console has no horizontal overflow on a phone', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await setUp(page);

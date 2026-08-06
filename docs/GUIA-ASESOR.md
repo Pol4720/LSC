@@ -103,6 +103,40 @@ Nuevo → Contactado → Asesoría agendada → Requisitos levantados
 
 ---
 
+## 3b · El menú de plataformas
+
+Abajo a la derecha, en la consola y en la calculadora, tienes el botón
+**Plataformas**. También se abre con la tecla **`P`** desde cualquier pantalla,
+y desde el enlace *Plataformas* del menú lateral.
+
+Dentro está todo lo que abres en un día de trabajo, agrupado:
+
+| Grupo | Qué hay |
+|---|---|
+| **La Subasta Cubana** | Sitio, inventario, calculadora oficial, precios y tarifas, cómo comprar |
+| **Subastas** | Copart, IAA, Manheim, ACV, ADESA, bid.cars, AutoAstat, SCA |
+| **Historial y valoración** | Carfax, AutoCheck, decodificador VIN de la NHTSA, NICB VINCheck, KBB, Edmunds |
+| **Transporte** | Super Dispatch, Super Dispatch Shipper, Central Dispatch, FMCSA SAFER |
+
+Tres cosas que ahorran tiempo:
+
+* **Escribe para filtrar.** "carfax", "transporte", "vin"…
+* **Con un cliente abierto los enlaces se rellenan solos** con su marca y
+  modelo. Si algún lote guardado trae VIN, los enlaces saltan directo a ese VIN
+  (Carfax, Copart, bid.cars, AutoAstat y la NHTSA lo soportan) y verás la
+  etiqueta `VIN` al lado del nombre.
+* **Clic derecho sobre una plataforma copia su enlace** en vez de abrirla.
+
+Los mismos enlaces aparecen en línea dentro de la pestaña **Lotes objetivo** de
+cada cliente.
+
+> Los cuadritos de color son monogramas hechos a mano, no los logos reales de
+> cada empresa: incluir logos ajenos sería redistribuir marcas registradas, y
+> cargarlos de internet rompería la regla de "cero peticiones externas" que la
+> herramienta cumple.
+
+---
+
 ## 4 · La calculadora
 
 Funciona en dos direcciones:

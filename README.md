@@ -51,6 +51,14 @@ que el repo puede ser público sin exponer a nadie.
   presupuesto a puja máxima recomendada.
 * **Exportaciones**: CSV ancho (Excel), CSV largo (una fila por respuesta),
   JSON, Markdown, vCard, iCal, ficha imprimible / PDF, resumen para WhatsApp.
+* **Menú flotante de plataformas** (botón *Plataformas*, o la tecla `P`): acceso
+  en un clic a Copart, IAA, Manheim, ACV, ADESA, bid.cars, AutoAstat, SCA,
+  Carfax, AutoCheck, el decodificador VIN de la NHTSA, NICB VINCheck, KBB,
+  Edmunds, Super Dispatch, Central Dispatch, FMCSA y el propio sitio de
+  La Subasta Cubana (inventario, calculadora, tarifas, cómo comprar).
+  Con un cliente abierto los enlaces se rellenan solos con su marca y modelo, y
+  si algún lote guardado trae VIN saltan directo al VIN. Clic derecho copia el
+  enlace.
 * **Sincronización con GitHub** con un token que solo vive en tu navegador.
 
 ---
@@ -176,6 +184,8 @@ assets/js/
   crypto.js           cifrado extremo a extremo
   github.js           el repositorio como base de datos
   exports.js          CSV, JSON, vCard, iCal, Markdown, HTML
+  platforms.js        catálogo de plataformas externas y enlaces profundos
+  launcher.js         menú flotante de plataformas
   summary.js          resumen legible + perfil derivado
 data/                 los registros cifrados
 api/ · worker/        relays opcionales para tiempo real

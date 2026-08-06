@@ -29,6 +29,7 @@ import {
   toPrintableHtml, toWhatsApp, toICal, exportFilename,
 } from './exports.js';
 import { barChart, areaChart, statTile, weeklySeries } from './charts.js';
+import { mountLauncher, setLauncherContext, platformStrip, toggle as toggleLauncher } from './launcher.js';
 
 const store = createStore('console');
 
@@ -440,6 +441,11 @@ function paint() {
       nav('kanban', 'kanban', en ? 'Pipeline' : 'Embudo', counts.active),
       nav('calculator', 'calc', en ? 'Calculator' : 'Calculadora'),
       nav('settings', 'settings', en ? 'Settings' : 'Ajustes'),
+      el('button.side-link', {
+        type: 'button',
+        onclick: () => { closeSide(); toggleLauncher(true); },
+      }, icon('link'), el('span.grow', { text: en ? 'Platforms' : 'Plataformas' }),
+         el('kbd.side-kbd', { text: 'P' })),
     ),
     el('div.side-foot',
       el('div.sync-state', { class: S.sync.status === 'busy' ? '' : S.sync.status },
@@ -472,6 +478,7 @@ function paint() {
 
   const main = el('main.console-main', top, el('div.console-body', { id: 'view-body' }));
   root.append(el('div.console-shell', side, main));
+  mountLauncher(root);
   renderBody();
 }
 
@@ -487,12 +494,31 @@ const closeSide = () => { $('.side')?.classList.remove('open'); $('.side-scrim')
 function renderBody() {
   const body = $('#view-body');
   if (!body) return;
+  updateLauncherContext();
   clear(body);
   const views = {
     dashboard: viewDashboard, clients: viewClients, kanban: viewKanban,
     client: viewClient, calculator: viewCalculator, settings: viewSettings,
   };
   body.append((views[S.view] || viewDashboard)());
+}
+
+/**
+ * Deep links only make sense when a client is on screen: use their VIN if a
+ * target lot has one, otherwise the make + model they asked for.
+ */
+function updateLauncherContext() {
+  if (S.view !== 'client') { setLauncherContext({}); return; }
+  const rec = S.records.get(S.detailId);
+  if (!rec) { setLauncherContext({}); return; }
+  const vin = (rec.crm?.lots || []).map((l) => l.vin).find(Boolean) || null;
+  const make = (deepGet(rec.data, 'vehicle.makes') || [])[0] || '';
+  const model = (deepGet(rec.data, 'vehicle.models') || [])[0] || '';
+  setLauncherContext({
+    vin,
+    query: `${make} ${model}`.trim() || null,
+    clientName: deepGet(rec.data, 'contact.fullName') || rec.id,
+  });
 }
 
 /* ============================================================ dashboard == */
@@ -1110,30 +1136,19 @@ function tabLots(rec) {
       }, icon('trash')))))
       : el('p.text-subtle.text-sm', { text: en ? 'No lots yet. Paste a Copart, IAA or bid.cars link above.' : 'Aún no hay lotes. Pega arriba un enlace de Copart, IAA o bid.cars.' })));
 
-  box.append(el('div.callout.callout-brand',
-    el('span.ci', { text: '🔎' }),
-    el('div.stack.gap-2',
-      el('strong', { text: en ? 'Research shortcuts' : 'Atajos de investigación' }),
-      el('div.row.gap-2.wrap',
-        ...researchLinks(rec).map(([label, href]) =>
-          el('a.btn.btn-sm', { href, target: '_blank', rel: 'noopener noreferrer' },
-            icon('link'), el('span', { text: label })))))));
+  const vin = (crm.lots || []).map((l) => l.vin).find(Boolean) || null;
+  const make = (deepGet(rec.data, 'vehicle.makes') || [])[0] || '';
+  const model = (deepGet(rec.data, 'vehicle.models') || [])[0] || '';
+  box.append(card(en ? 'Open a platform for this client' : 'Abrir una plataforma para este cliente',
+    el('div.stack.gap-3',
+      el('p.text-sm.text-muted', {
+        text: vin
+          ? (en ? `Links go straight to VIN ${vin}.` : `Los enlaces van directo al VIN ${vin}.`)
+          : (en ? 'Search links are pre-filled with what this client is looking for.'
+                : 'Los enlaces de búsqueda vienen rellenos con lo que busca este cliente.'),
+      }),
+      platformStrip({ vin, query: `${make} ${model}`.trim() || null }))));
   return box;
-}
-
-function researchLinks(rec) {
-  const d = rec.data;
-  const make = (deepGet(d, 'vehicle.makes') || [])[0] || '';
-  const model = (deepGet(d, 'vehicle.models') || [])[0] || '';
-  const q = encodeURIComponent(`${make} ${model}`.trim());
-  return [
-    ['Copart', `https://www.copart.com/lotSearchResults?free=true&query=${q}`],
-    ['IAA', `https://www.iaai.com/Search?Keyword=${q}`],
-    ['bid.cars', `https://bid.cars/en/search/archived/results?search-type=filters&type=Automobile&make=${encodeURIComponent(make)}`],
-    ['AutoAstat', 'https://autoastat.com/'],
-    ['Carfax', 'https://www.carfax.com/'],
-    ['Super Dispatch', 'https://super.superdispatch.com/'],
-  ];
 }
 
 function tabCosts(rec) {

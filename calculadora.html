@@ -79,6 +79,7 @@
   <script type="module">
     import { I18n, Theme, icon, buildToolbar, $ } from './assets/js/core.js';
     import { calculatorPanel } from './assets/js/calculator.js';
+    import { mountLauncher } from './assets/js/launcher.js';
 
     I18n.init(); Theme.init();
     $('#mark').append(icon('calc'));
@@ -99,7 +100,8 @@
       host.replaceChildren(calculatorPanel({ budget: 10000 }));
     }
     paint();
-    I18n.onChange(paint);
+    mountLauncher(document.body);
+    I18n.onChange(() => { paint(); mountLauncher(document.body); });
   </script>
 </body>
 </html>
