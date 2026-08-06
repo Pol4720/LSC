@@ -87,11 +87,21 @@ cual. Solo el relay necesita servidor.
 ## Local
 
 ```bash
-npm run dev     # http://localhost:4173
+npm run dev              # http://localhost:4173
+npm run dev -- 4174 --prefix=/LSC   # igual que Pages: http://localhost:4174/LSC/
 ```
 
 Sirve el repo tal cual, sin caché. Necesario porque los módulos ES no cargan
 desde `file://`.
+
+### Sobre la subruta
+
+GitHub Pages sirve un sitio de proyecto en `https://usuario.github.io/repo/`,
+nunca en la raíz del dominio. Todo el sitio usa rutas relativas y los enlaces
+que genera (el que el cliente te manda por WhatsApp, los del formulario que
+compartes) conservan la subruta. `tests/e2e/subpath.spec.js` levanta un segundo
+servidor montado en `/LSC/` y recorre formulario, consola y calculadora ahí para
+que esto no se rompa nunca.
 
 ---
 
