@@ -2,6 +2,7 @@ import { existsSync } from 'node:fs';
 import { defineConfig, devices } from '@playwright/test';
 
 const PORT = 4173;
+const SUBPATH_PORT = 4174;   // mirrors GitHub Pages serving the site at /LSC/
 
 /**
  * Some sandboxes ship a pre-installed Chromium that does not match the
@@ -46,10 +47,18 @@ export default defineConfig({
     { name: 'mobile', use: { ...devices['Pixel 7'], launchOptions } },
   ],
 
-  webServer: {
-    command: `node scripts/serve.mjs ${PORT}`,
-    url: baseURL,
-    reuseExistingServer: !process.env.CI,
-    timeout: 20_000,
-  },
+  webServer: [
+    {
+      command: `node scripts/serve.mjs ${PORT}`,
+      url: baseURL,
+      reuseExistingServer: !process.env.CI,
+      timeout: 20_000,
+    },
+    {
+      command: `node scripts/serve.mjs ${SUBPATH_PORT} --prefix=/LSC`,
+      url: `http://127.0.0.1:${SUBPATH_PORT}/LSC/`,
+      reuseExistingServer: !process.env.CI,
+      timeout: 20_000,
+    },
+  ],
 });

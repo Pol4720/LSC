@@ -3,7 +3,10 @@
  * LSC · Zero-dependency static server for local development and e2e tests.
  * The app is a plain static site, so this is all the tooling it needs.
  *
- *   node scripts/serve.mjs [port]
+ *   node scripts/serve.mjs [port] [--prefix=/LSC]
+ *
+ * --prefix mirrors how GitHub Pages serves a project site from a subpath, so
+ * the e2e suite can prove the app never assumes it lives at the domain root.
  */
 
 import { createServer } from 'node:http';
@@ -13,6 +16,8 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const PORT = Number(process.argv[2] || process.env.PORT || 4173);
+const PREFIX = (process.argv.find((a) => a.startsWith('--prefix=')) || '')
+  .replace('--prefix=', '').replace(/\/+$/, '');
 
 const MIME = {
   '.html': 'text/html; charset=utf-8',
@@ -33,6 +38,11 @@ const server = createServer(async (req, res) => {
   try {
     const url = new URL(req.url, `http://localhost:${PORT}`);
     let path = normalize(decodeURIComponent(url.pathname)).replace(/^(\.\.[/\\])+/, '');
+    if (PREFIX) {
+      if (path === PREFIX) { res.writeHead(301, { Location: `${PREFIX}/` }).end(); return; }
+      if (!path.startsWith(`${PREFIX}/`)) { res.writeHead(404).end('404 Not Found'); return; }
+      path = path.slice(PREFIX.length);
+    }
     if (path.endsWith('/')) path += 'index.html';
 
     let file = join(ROOT, path);
@@ -54,4 +64,4 @@ const server = createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, () => console.log(`LSC dev server → http://localhost:${PORT}/`));
+server.listen(PORT, () => console.log(`LSC dev server → http://localhost:${PORT}${PREFIX}/`));
