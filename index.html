@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>La Subasta Cubana · Encuentra tu auto ideal</title>
+  <meta name="description" content="Cuéntanos qué auto necesitas y lo buscamos por ti en Copart, IAA, Manheim y ACV. Formulario gratuito, cifrado y sin compromiso.">
+  <meta name="theme-color" content="#f5f7fb">
+  <meta name="color-scheme" content="light dark">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="La Subasta Cubana · Encuentra tu auto ideal">
+  <meta property="og:description" content="Dinos qué necesitas y buscamos la mejor oferta en las subastas de EE.UU.">
+  <meta property="og:image" content="assets/img/og.svg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/img/favicon.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/ui.css">
+  <link rel="stylesheet" href="assets/css/form.css">
+  <link rel="stylesheet" href="assets/css/print.css" media="print">
+
+  <script>
+    /* Paint the correct theme before first frame to avoid a flash. */
+    (function () {
+      try {
+        var m = localStorage.getItem('lsc.theme');
+        var dark = m === 'dark' || ((!m || m === 'auto') && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+
+        var q = new URLSearchParams(location.search).get('lang');
+        var saved = localStorage.getItem('lsc.lang');
+        var nav = (navigator.language || 'es').slice(0, 2);
+        var lang = (q === 'en' || q === 'es') ? q
+          : (saved === 'en' || saved === 'es') ? saved
+          : (nav === 'en' ? 'en' : 'es');
+        document.documentElement.lang = lang;
+      } catch (e) { /* private mode */ }
+    })();
+  </script>
+</head>
+<body>
+  <a class="sr-only" href="#main">Saltar al contenido</a>
+
+  <div id="app">
+    <noscript>
+      <div style="max-width:640px;margin:12vh auto;padding:24px;text-align:center;font-family:system-ui">
+        <h1>Necesitamos JavaScript</h1>
+        <p>Este formulario funciona en tu navegador y guarda tus respuestas de forma segura.
+           Actívalo para continuar, o escríbenos por WhatsApp.</p>
+      </div>
+    </noscript>
+    <div style="display:grid;place-items:center;min-height:60vh">
+      <div class="spinner" style="width:32px;height:32px" aria-label="Cargando"></div>
+    </div>
+  </div>
+
+  <footer class="site-foot">
+    <div class="container row between wrap gap-3">
+      <span class="text-xs text-subtle">© <span id="year"></span> La Subasta Cubana · Hialeah, FL</span>
+      <nav class="row gap-4">
+        <a class="text-xs text-subtle" href="calculadora.html">Calculadora</a>
+        <a class="text-xs text-subtle" href="console.html">Consola del asesor</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { boot } from './assets/js/form.js';
+    document.getElementById('year').textContent = new Date().getFullYear();
+    boot(document.getElementById('app')).catch((e) => {
+      console.error(e);
+      document.getElementById('app').innerHTML =
+        '<div style="padding:40px;text-align:center"><h2>Algo salió mal</h2><p>' +
+        String(e && e.message || e) + '</p></div>';
+    });
+  </script>
+</body>
+</html>

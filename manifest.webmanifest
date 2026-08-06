@@ -1,0 +1,14 @@
+{
+  "name": "La Subasta Cubana · Centro de Asesoría",
+  "short_name": "LSC",
+  "description": "Levantamiento de necesidades y gestión de clientes para asesores de subastas de autos.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b1220",
+  "theme_color": "#e8a33d",
+  "lang": "es",
+  "icons": [
+    { "src": "assets/img/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

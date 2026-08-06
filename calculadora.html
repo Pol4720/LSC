@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Calculadora de costo total · La Subasta Cubana</title>
+  <meta name="description" content="Calcula el costo real de comprar un auto en Copart, IAA, Manheim o ACV: comisiones, gate fee, transporte, título e impuestos.">
+  <meta name="theme-color" content="#f5f7fb">
+  <meta name="color-scheme" content="light dark">
+
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/ui.css">
+  <link rel="stylesheet" href="assets/css/form.css">
+  <link rel="stylesheet" href="assets/css/console.css">
+  <link rel="stylesheet" href="assets/css/print.css" media="print">
+
+  <script>
+    (function () {
+      try {
+        var m = localStorage.getItem('lsc.theme');
+        var dark = m === 'dark' || ((!m || m === 'auto') && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+
+        var q = new URLSearchParams(location.search).get('lang');
+        var saved = localStorage.getItem('lsc.lang');
+        var nav = (navigator.language || 'es').slice(0, 2);
+        var lang = (q === 'en' || q === 'es') ? q
+          : (saved === 'en' || saved === 'es') ? saved
+          : (nav === 'en' ? 'en' : 'es');
+        document.documentElement.lang = lang;
+      } catch (e) { /* private mode */ }
+    })();
+  </script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="bar">
+        <a class="brand" href="./">
+          <span class="brand-mark" id="mark"></span>
+          <span class="brand-text">
+            <span class="brand-name">La Subasta Cubana</span>
+            <span class="brand-sub" id="sub">Calculadora</span>
+          </span>
+        </a>
+        <div class="grow"></div>
+        <div id="tools"></div>
+      </div>
+    </header>
+
+    <main class="form-main" id="main">
+      <div class="container">
+        <div class="page-head">
+          <div>
+            <h1 id="title">Calculadora de costo total</h1>
+            <p id="lede">Del precio de martillo al número real que pagas: comisiones de subasta, gate fee, transporte, título, impuestos y exportación.</p>
+          </div>
+        </div>
+        <div id="calc"></div>
+        <p class="text-xs text-subtle" style="margin-top:24px" id="disclaimer">
+          Los importes salen de tablas de tarifas editables y son estimados. Confirma siempre con el tarifario vigente de la subasta antes de pujar.
+        </p>
+      </div>
+    </main>
+
+    <footer class="site-foot">
+      <div class="container row between wrap gap-3">
+        <span class="text-xs text-subtle">© <span id="year"></span> La Subasta Cubana</span>
+        <nav class="row gap-4">
+          <a class="text-xs text-subtle" href="./">Formulario</a>
+          <a class="text-xs text-subtle" href="console.html">Consola</a>
+        </nav>
+      </div>
+    </footer>
+  </div>
+
+  <script type="module">
+    import { I18n, Theme, icon, buildToolbar, $ } from './assets/js/core.js';
+    import { calculatorPanel } from './assets/js/calculator.js';
+    import { mountLauncher } from './assets/js/launcher.js';
+
+    I18n.init(); Theme.init();
+    $('#mark').append(icon('calc'));
+    $('#tools').append(buildToolbar({ onLang: paint, onTheme: () => {} }).node);
+    $('#year').textContent = new Date().getFullYear();
+
+    function paint() {
+      const en = I18n.lang === 'en';
+      $('#sub').textContent = en ? 'Calculator' : 'Calculadora';
+      $('#title').textContent = en ? 'All-in cost calculator' : 'Calculadora de costo total';
+      $('#lede').textContent = en
+        ? 'From the hammer price to the number you actually pay: auction fees, gate fee, transport, title, taxes and export.'
+        : 'Del precio de martillo al número real que pagas: comisiones de subasta, gate fee, transporte, título, impuestos y exportación.';
+      $('#disclaimer').textContent = en
+        ? 'Amounts come from editable fee tables and are estimates. Always confirm against the live auction schedule before bidding.'
+        : 'Los importes salen de tablas de tarifas editables y son estimados. Confirma siempre con el tarifario vigente de la subasta antes de pujar.';
+      const host = $('#calc');
+      host.replaceChildren(calculatorPanel({ budget: 10000 }));
+    }
+    paint();
+    mountLauncher(document.body);
+    I18n.onChange(() => { paint(); mountLauncher(document.body); });
+  </script>
+</body>
+</html>

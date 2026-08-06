@@ -1,0 +1,13 @@
+# Cloudflare Worker relay for LSC submissions.
+#   npx wrangler secret put GITHUB_TOKEN
+#   npx wrangler deploy
+name = "lsc-relay"
+main = "index.js"
+compatibility_date = "2025-01-01"
+
+[vars]
+GITHUB_OWNER = "Pol4720"
+GITHUB_REPO = "LSC"
+GITHUB_BRANCH = "main"
+# Comma-separated. Leave empty to allow any origin.
+ALLOWED_ORIGIN = "https://pol4720.github.io"

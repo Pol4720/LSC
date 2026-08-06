@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#172336"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#efc272"/>
+      <stop offset="1" stop-color="#d1892a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="1050" cy="90" r="260" fill="#4c8dff" opacity=".10"/>
+  <circle cx="120" cy="580" r="240" fill="#12b5a5" opacity=".10"/>
+  <rect x="80" y="86" width="88" height="88" rx="22" fill="url(#gold)"/>
+  <g fill="none" stroke="#1c1204" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" transform="translate(80 86) scale(1.375)">
+    <path d="M36 14l14 14"/><path d="M43 21L29 35"/><path d="M14 50h22"/><path d="M22 44l13-13"/><path d="M27 26l11 11"/>
+  </g>
+  <text x="196" y="128" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#a7b3ca" letter-spacing="4">LA SUBASTA CUBANA</text>
+  <text x="196" y="170" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="22" fill="#7d8aa4" letter-spacing="2">CENTRO DE ASESORÍA</text>
+  <text x="80" y="330" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="78" font-weight="800" fill="#eaf0fb">Encuentra tu auto ideal</text>
+  <text x="80" y="410" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="34" fill="#a7b3ca">Buscamos por ti en Copart, IAA, Manheim y ACV.</text>
+  <g font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="26" fill="#e8a33d">
+    <text x="80" y="500">🔒 Cifrado extremo a extremo</text>
+    <text x="500" y="500">⚡ 3 minutos</text>
+    <text x="760" y="500">🇪🇸 🇺🇸 Español / English</text>
+  </g>
+</svg>
