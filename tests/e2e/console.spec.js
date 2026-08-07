@@ -79,7 +79,7 @@ test('the passphrase actually gates access', async ({ page }) => {
 
   await page.locator('#pp').fill('contraseña-incorrecta');
   await page.getByRole('button', { name: 'Desbloquear' }).click();
-  await expect(page.locator('.err')).toContainText('incorrecta');
+  await expect(page.locator('.err')).toContainText('incorrectos');
   await expect(page.locator('.console-shell')).toHaveCount(0);
 
   await page.locator('#pp').fill(PASS);

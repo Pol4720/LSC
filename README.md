@@ -60,6 +60,10 @@ que el repo puede ser público sin exponer a nadie.
   si algún lote guardado trae VIN saltan directo al VIN. Clic derecho copia el
   enlace.
 * **Sincronización con GitHub** con un token que solo vive en tu navegador.
+* **Control de acceso a la consola**: intentos fallidos penalizados con espera
+  creciente, bloqueo automático por inactividad, y códigos de acceso temporal
+  que puedes generar, mandar por WhatsApp y revocar cuando quieras — para
+  darle uso a alguien por un rato sin entregar tu contraseña real.
 
 ---
 
@@ -156,6 +160,10 @@ Después pon la URL en **Ajustes → Endpoint de relay** (o en
 * Sin CDN, sin analítica, sin cookies, sin peticiones a terceros: el sitio
   funciona entero desde su propio origen.
 * El relay nunca puede leer lo que almacena: recibe y guarda ciphertext.
+* **Solo tú entras a la consola** (o quien autorices tú, por un tiempo): intentos
+  fallidos con espera creciente, bloqueo automático por inactividad, y códigos
+  de acceso temporales y revocables — nunca hace falta compartir tu contraseña
+  real.
 
 Detalle completo en [`docs/SECURITY.md`](docs/SECURITY.md).
 
