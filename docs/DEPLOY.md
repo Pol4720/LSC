@@ -7,13 +7,27 @@ corre en el navegador.
 
 ## GitHub Pages (lo que usas hoy)
 
-**Settings → Pages → Source: GitHub Actions.**
+**Settings → Pages → Source: «Deploy from a branch» → `main` → `/ (root)`.**
 
-`.github/workflows/pages.yml` corre las pruebas y despliega en cada push a
-`main`. El sitio queda en `https://pol4720.github.io/LSC/`.
+Es la opción recomendada y la única que no depende de nada más. El sitio son
+archivos estáticos con un `.nojekyll` en la raíz: GitHub los sirve tal cual, sin
+compilar, sin ejecutar workflows y sin esperar runners. Cada push a `main` se
+publica en `https://pol4720.github.io/LSC/`.
 
-También sirve el modo clásico *Deploy from a branch* → `main` / `root`: hay un
-`.nojekyll` en la raíz para que Jekyll no toque nada.
+### La alternativa por Actions
+
+`.github/workflows/pages.yml` hace lo mismo vía *Source: GitHub Actions*, con
+`enablement: true` para activar Pages solo. Se lanza a mano desde la pestaña
+Actions (`Run workflow`). Solo tiene sentido si algún día quieres generar el
+sitio en vez de servirlo tal cual; hoy no aporta nada y añade una dependencia
+—la disponibilidad de runners— que la opción de rama no tiene.
+
+### Las pruebas
+
+`.github/workflows/ci.yml` corre las unitarias, las verificaciones estáticas y
+el guardián de cifrado en cada push y cada pull request. Es independiente del
+despliegue: publicar nunca queda bloqueado por la cola de Actions, y las pruebas
+siguen protegiendo `main`.
 
 **Lo que Pages da:** hosting gratis, HTTPS, CDN global, sin límite práctico de
 visitas.

@@ -67,9 +67,17 @@ que el repo puede ser público sin exponer a nadie.
 
 ### 1 · Publica el sitio
 
-Settings → Pages → **Source: GitHub Actions**. El workflow
-`.github/workflows/pages.yml` corre las pruebas y despliega en cada push a
-`main`.
+**Settings → Pages → Source: «Deploy from a branch» → `main` → `/ (root)`.**
+
+Eso es todo. El sitio son archivos estáticos con un `.nojekyll` en la raíz, así
+que GitHub los sirve tal cual, sin compilar ni ejecutar nada. En un par de
+minutos queda en `https://pol4720.github.io/LSC/` y cada push a `main` se
+publica solo.
+
+> Existe también `.github/workflows/pages.yml` por si prefieres
+> *Source: GitHub Actions*; se lanza a mano desde la pestaña Actions. No hace
+> falta: la opción de rama es más simple y no depende de que haya runners
+> disponibles.
 
 ### 2 · Crea tus claves
 
