@@ -63,6 +63,64 @@ anyone can write to the advisor, only the advisor can read.
 **Offline-capable.** Sealing needs no network. A client on a bad connection can
 complete the form and send it later.
 
+## Console access control
+
+The encryption above answers *what can be read*. A second, independent layer
+answers *who gets to open the console at all* — added specifically so a
+supervisor or coworker cannot use the tool, or the data in it, without the
+advisor's knowledge or consent.
+
+**Unlock throttling.** The first three wrong guesses are free; every one after
+that costs an escalating delay (2s, 4s, 8s… capped at 60s), persisted in
+`localStorage` so a page reload cannot reset it. It applies identically to the
+real passphrase and to temporary codes, and the error message never reveals
+which kind was being checked (`tests/e2e/access.spec.js` asserts this).
+
+**Idle / backgrounded-tab auto-lock.** The console re-locks itself after a
+configurable period (Ajustes → Seguridad y acceso; default 20 minutes) of no
+mouse, keyboard or touch activity, or after the tab has sat in the background
+that long — the latter check re-verifies elapsed wall-clock time the moment
+the tab becomes visible again, since browsers throttle timers in background
+tabs. This is the direct answer to "a coworker walks up to my open laptop":
+the passphrase screen alone does nothing if the console was already unlocked
+and left unattended.
+
+**Temporary access grants — "authorize someone momentarily".** From Ajustes,
+the advisor can generate a random, high-entropy code (16 characters, ~80 bits
+— never advisor-chosen, since the wrapped blob it protects may end up public)
+that wraps a *second* copy of the same private key, tagged with an expiry the
+advisor picks (1 hour to 7 days, or a custom date) and a `revoked` flag. Under
+the hood this is exactly the multi-recipient pattern age/PGP use for "any of
+these passphrases opens the same file": the vault has one lock with several
+keys, not several vaults.
+
+- Unlocking with a valid code opens the console exactly like the real
+  passphrase would — full read/write access to whatever the advisor already
+  synced. That is the point: a genuine, revocable substitute for handing over
+  the real passphrase.
+- Codes tried against this device's own cache resolve instantly, offline. If
+  no match is found locally, the console gives the repository a short, bounded
+  window (a few seconds) to answer before giving up — enough for a code
+  published from a different device to work, without risking an indefinite
+  hang on a bad connection.
+- Revoking a code (or just letting it expire) is checked on every future
+  unlock attempt, from any device, because that check re-fetches the published
+  list rather than trusting a local cache. A temporary session also carries
+  its own hard stop: it force-locks itself the moment its grant's expiry
+  passes, checked every 15 seconds, independent of the idle timer.
+- **What this cannot do:** revocation and expiry are checked at the moment of
+  unlocking, not continuously enforced afterwards. A browser tab that is
+  already unlocked keeps the decrypted key in memory until it locks on its own
+  (idle, expiry, or a manual click) — revoking the code that opened it does
+  not reach into that tab and close it. No purely client-side system, this one
+  included, can promise otherwise; the same limitation applies to a shared
+  physical key or an OS screen lock. Treat a revoke as "stop this from being
+  used *again*", not as a remote kill switch for a session already in
+  progress.
+
+See `docs/GUIA-ASESOR.md` for the day-to-day walkthrough of creating and
+revoking a code.
+
 ## Threat model
 
 | Threat | Outcome |
@@ -72,9 +130,12 @@ complete the form and send it later.
 | A share link is intercepted (WhatsApp, email, screenshot) | The link carries a sealed envelope; useless without the private key |
 | The relay endpoint is compromised | It only ever handled ciphertext; it cannot decrypt what it stored |
 | GitHub is compromised | Same as above |
+| A coworker or supervisor opens the console cold, doesn't know the passphrase | Sees only the lock screen; guessing is throttled |
+| A coworker or supervisor sits at the advisor's laptop while it's unlocked | Auto-lock closes the session after the configured idle/background period |
 | The advisor's laptop is stolen, screen locked | The vault is passphrase-wrapped with 310 000 PBKDF2 iterations |
-| The advisor's laptop is stolen, console unlocked | **Full compromise.** Lock the console when you step away. |
-| The advisor loses the passphrase and the backup | **Permanent data loss.** Nobody can recover it. |
+| The advisor's laptop is stolen, console unlocked | **Full compromise for that session.** Lock the console (or let auto-lock do it) whenever you step away. |
+| A temporary code leaks after its grant is revoked or expired | Rejected on the next unlock attempt, from any device that can reach the repository |
+| The advisor loses the passphrase, every backup, and has no active session | **Permanent data loss.** Nobody can recover it. |
 | A malicious script is injected into the site | Could read plaintext in the page. Mitigated by shipping zero third-party code — see below. |
 
 ## Supply chain

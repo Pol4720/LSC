@@ -259,6 +259,7 @@ export const PATHS = {
   crm: 'data/crm',
   index: 'data/index.json',
   advisorKey: 'data/config/advisor-key.json',
+  accessGrants: 'data/config/access-grants.json',
   settings: 'data/config/settings.json',
   submission: (id) => `data/submissions/${id}.json`,
   crmRecord: (id) => `data/crm/${id}.json`,

@@ -38,6 +38,58 @@ volver a pegarlo (y a restaurar tu respaldo de claves).
 
 ---
 
+## 1b · Cómo entrar, y cómo darle acceso a alguien más
+
+### La dirección
+
+**<https://pol4720.github.io/LSC/console.html>**
+
+Guárdala en tus marcadores. Es la única entrada a la consola.
+
+### Solo tú entras — por defecto
+
+La pantalla pide **una contraseña o un código de acceso**, en el mismo campo.
+Si alguien —un supervisor, un compañero— llega a esa pantalla sin conocer tu
+contraseña, no pasa de ahí:
+
+* **Los intentos fallidos se penalizan.** Los primeros tres son gratis; a
+  partir del cuarto hay que esperar cada vez más (2s, 4s, 8s… hasta 60s). Ni
+  recargando la página se salta la espera.
+* **Se bloquea sola si la dejas abierta.** Por defecto, a los 20 minutos sin
+  actividad (o si la pestaña estuvo mucho tiempo en segundo plano) vuelve a
+  pedir la contraseña. Lo cambias en **Ajustes → Seguridad y acceso**.
+* El botón **Bloquear** (abajo, en el menú lateral) la cierra al instante
+  cuando te alejas de la computadora.
+
+### Darle acceso a alguien por un tiempo — sin tu contraseña real
+
+Para cuando de verdad necesitas que alguien más entre (cubrirte un día, que un
+compañero autorizado revise algo contigo):
+
+1. **Ajustes → Seguridad y acceso → Nuevo código temporal.**
+2. Ponle una etiqueta si quieres (para ti, no aparece en ningún lado público) y
+   elige cuándo vence: 1 hora, 4 horas, 1 día, 3 días, 7 días, o una fecha
+   personalizada.
+3. **Generar código.** Aparece una sola vez — cópialo y mándaselo por
+   WhatsApp o dilo por teléfono. Nunca lo subas a ningún sitio.
+4. Esa persona entra con ESE código, en el mismo campo de la contraseña. Ve y
+   puede usar exactamente lo mismo que tú, hasta que:
+   * llegue la hora que elegiste (se bloquea sola, automáticamente), o
+   * tú lo revoques a mano en cualquier momento desde **Ajustes**.
+
+**Nunca compartas tu contraseña real.** Para eso son los códigos temporales:
+dan acceso completo mientras están activos, pero se apagan solos y los puedes
+cortar cuando quieras — tu contraseña, en cambio, no se puede "revocar" sin
+cambiarla por completo.
+
+> Un detalle honesto: revocar un código impide que se use *de nuevo*. Si esa
+> persona ya estaba adentro cuando lo revocaste, su sesión sigue abierta hasta
+> que se bloquee sola (por inactividad, por vencimiento, o porque la cierra).
+> Ningún sistema que corre solo en el navegador puede alcanzar una pestaña ya
+> abierta en otra computadora y cerrarla a la fuerza — ni este, ni ninguno.
+
+---
+
 ## 2 · Conseguir la información del cliente
 
 Tienes tres formas, y todas terminan igual: el cliente aparece en tu consola.

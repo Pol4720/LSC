@@ -30,6 +30,10 @@ import {
 } from './exports.js';
 import { barChart, areaChart, statTile, weeklySeries } from './charts.js';
 import { mountLauncher, setLauncherContext, platformStrip, toggle as toggleLauncher } from './launcher.js';
+import {
+  computeBackoffMs, secondsRemaining, EXPIRY_PRESETS, generateAccessCode,
+  grantStatus, isGrantUsable, mergeGrants, withTimeout,
+} from './access.js';
 
 const store = createStore('console');
 
@@ -38,6 +42,9 @@ const S = {
   unlocked: false,
   privateJwk: null,
   publicJwk: null,
+  tempGrant: null,           // the temporary access grant used to unlock, if any
+  grants: [],                // this device's cached list of temporary access grants
+  unlockFail: { count: 0, until: 0 },
   records: new Map(),       // id -> record
   view: 'dashboard',
   detailId: null,
@@ -54,7 +61,7 @@ const S = {
 function loadSettings() {
   return {
     owner: CONFIG.owner, repo: CONFIG.repo, branch: CONFIG.branch,
-    token: '', autoSync: true, relayUrl: CONFIG.relayUrl,
+    token: '', autoSync: true, relayUrl: CONFIG.relayUrl, autoLockMinutes: 20,
     ...(store.get('settings', {}) || {}),
   };
 }
@@ -84,28 +91,90 @@ export async function boot(mount) {
 }
 
 /* ============================================================== unlock === */
+/**
+ * One field, two credentials: the real passphrase, or a temporary access
+ * code someone else was given. Trying both without a mode toggle means the
+ * screen never has to say which kind of secret it's checking — a small but
+ * real reduction in what an onlooker learns from watching someone type.
+ */
 function renderLock() {
   clear(root);
   const en = I18n.lang === 'en';
   const pass = el('input.input', { type: 'password', autocomplete: 'current-password', id: 'pp' });
   const errBox = el('div.err.hidden', icon('warn'), el('span'));
+  const submitLabel = el('span', { text: t('common.unlock') });
+  const submitBtn = el('button.btn.btn-primary.btn-lg.btn-block', { type: 'submit' }, icon('unlock'), submitLabel);
+
+  S.unlockFail = store.get('unlockThrottle', { count: 0, until: 0 });
+  let tickTimer = null;
+
+  const paintThrottle = () => {
+    clearInterval(tickTimer);
+    const wait = secondsRemaining(S.unlockFail.until);
+    if (wait <= 0) {
+      submitBtn.disabled = false;
+      clear(submitBtn); submitBtn.append(icon('unlock'), submitLabel);
+      return;
+    }
+    submitBtn.disabled = true;
+    const tick = () => {
+      const s = secondsRemaining(S.unlockFail.until);
+      if (s <= 0) { paintThrottle(); return; }
+      clear(submitBtn);
+      submitBtn.append(icon('lock'), el('span', { text: en ? `Wait ${s}s…` : `Espera ${s}s…` }));
+    };
+    tick();
+    tickTimer = setInterval(tick, 1000);
+  };
+  paintThrottle();
+
+  const showError = () => {
+    errBox.classList.remove('hidden');
+    errBox.querySelector('span').textContent = en ? 'Wrong passphrase or code.' : 'Contraseña o código incorrectos.';
+    pass.select();
+  };
 
   const doUnlock = async (e) => {
     e?.preventDefault?.();
     errBox.classList.add('hidden');
+    if (secondsRemaining(S.unlockFail.until) > 0) return;
+    const code = pass.value;
+
+    // 1) the advisor's real passphrase.
     try {
       const vault = store.get('vault');
-      S.privateJwk = await unwrapPrivateKey(vault, pass.value);
+      S.privateJwk = await unwrapPrivateKey(vault, code);
       S.publicJwk = store.get('publicKey');
-      S.unlocked = true;
-      await loadLocalRecords();
-      handleHash();
-      if (S.settings.autoSync && S.settings.token) syncNow({ silent: true });
-    } catch {
-      errBox.classList.remove('hidden');
-      errBox.querySelector('span').textContent = en ? 'Wrong passphrase.' : 'Contraseña incorrecta.';
-      pass.select();
+      S.tempGrant = null;
+      await activateSession();
+      return;
+    } catch { /* not the passphrase — try a temporary code next */ }
+
+    // 2) a temporary access grant. Whatever is already cached on this device
+    //    is tried first — instant, no network — which covers the common case
+    //    of a grant created and used on the SAME laptop. Only if nothing
+    //    matches locally do we give the repository a bounded chance to answer,
+    //    so a grant published from another device (or a fresh revocation) is
+    //    still honoured without risking an indefinite hang on a bad connection.
+    await loadGrants();
+    let hit = await tryGrants(S.grants, code);
+    if (!hit) {
+      await pullGrants();
+      hit = await tryGrants(S.grants, code);
     }
+    if (hit) {
+      S.privateJwk = hit.jwk;
+      S.publicJwk = store.get('publicKey');
+      S.tempGrant = hit.grant;
+      await activateSession();
+      return;
+    }
+
+    S.unlockFail = { count: S.unlockFail.count + 1, until: 0 };
+    S.unlockFail.until = Date.now() + computeBackoffMs(S.unlockFail.count);
+    store.set('unlockThrottle', S.unlockFail);
+    paintThrottle();
+    showError();
   };
 
   root.append(el('div.lock-screen',
@@ -114,14 +183,13 @@ function renderLock() {
       el('div.text-center.stack.gap-2',
         el('h1', { text: en ? 'Advisor console' : 'Consola del asesor' }),
         el('p.text-muted', {
-          text: en ? 'Enter your passphrase to decrypt your clients.'
-                   : 'Escribe tu contraseña para descifrar tus clientes.',
+          text: en ? 'Enter your passphrase — or a temporary access code — to continue.'
+                   : 'Escribe tu contraseña, o un código de acceso temporal, para continuar.',
         })),
       el('div.field',
-        el('label.label', { for: 'pp', text: en ? 'Passphrase' : 'Contraseña' }),
+        el('label.label', { for: 'pp', text: en ? 'Passphrase or access code' : 'Contraseña o código de acceso' }),
         pass, errBox),
-      el('button.btn.btn-primary.btn-lg.btn-block', { type: 'submit' },
-        icon('unlock'), el('span', { text: t('common.unlock') })),
+      submitBtn,
       el('div.row.center.gap-3',
         el('button.btn.btn-ghost.btn-sm', {
           type: 'button', onclick: renderSetup,
@@ -150,14 +218,13 @@ function renderSetup() {
     const vault = await wrapPrivateKey(privateJwk, p1.value);
     store.set('vault', vault);
     store.set('publicKey', publicJwk);
-    S.privateJwk = privateJwk; S.publicJwk = publicJwk; S.unlocked = true;
+    S.privateJwk = privateJwk; S.publicJwk = publicJwk; S.tempGrant = null;
 
     downloadBlob(`lsc-backup-${kid}.json`,
       JSON.stringify({ kind: 'lsc-key-backup', createdAt: new Date().toISOString(), vault, publicKey: publicJwk }, null, 2),
       'application/json');
 
-    await loadLocalRecords();
-    paint();
+    await activateSession();
     setTimeout(() => showPublishKeyDialog(), 400);
   };
 
@@ -246,6 +313,164 @@ function showPublishKeyDialog() {
   });
 }
 
+/* =========================================================== access grants == */
+async function loadGrants() {
+  S.grants = store.get('grants', []);
+}
+
+/** Refresh the grants list from the repo (anonymous read, bounded) so a
+ *  revoked or expired grant is honoured even on a device that never had it
+ *  cached locally. Bounded so a slow or absent connection cannot hang the UI. */
+async function pullGrants() {
+  await loadGrants();
+  if (!S.repo?.configured) return;
+  try {
+    const remote = await withTimeout(S.repo.readJson(PATHS.accessGrants, null), 3000);
+    if (Array.isArray(remote)) {
+      S.grants = mergeGrants(S.grants, remote);
+      store.set('grants', S.grants);
+    }
+  } catch { /* offline, unreachable, or timed out — the local cache is still tried */ }
+}
+
+/** Try a code against every currently-usable grant; the first match wins. */
+async function tryGrants(list, code) {
+  const now = Date.now();
+  for (const grant of list) {
+    if (!isGrantUsable(grant, now)) continue;
+    try { return { grant, jwk: await unwrapPrivateKey(grant.vault, code) }; }
+    catch { /* not this one */ }
+  }
+  return null;
+}
+
+async function publishGrants() {
+  if (!S.repo?.canWrite) return false;
+  await S.repo.putJson(PATHS.accessGrants, S.grants, { message: 'chore(access): update access grants' });
+  return true;
+}
+
+/** Wrap a fresh copy of the private key under a newly generated code. */
+async function createGrant({ label, expiresAt }) {
+  const code = generateAccessCode();
+  const vault = await wrapPrivateKey(S.privateJwk, code);
+  const grant = {
+    id: uid('GR-'), label: label || '', createdAt: new Date().toISOString(),
+    expiresAt, revoked: false, vault,
+  };
+  S.grants = [grant, ...S.grants];
+  store.set('grants', S.grants);
+  let published = false;
+  if (S.repo?.canWrite) {
+    try { await publishGrants(); published = true; }
+    catch (e) { console.warn('[LSC] could not publish the access grant', e); }
+  }
+  return { code, grant, published };
+}
+
+async function revokeGrant(id) {
+  S.grants = S.grants.map((g) => (g.id === id ? { ...g, revoked: true } : g));
+  store.set('grants', S.grants);
+  if (S.repo?.canWrite) {
+    try { await publishGrants(); }
+    catch (e) { toast(String(e.message), 'danger', 6000); }
+  }
+}
+
+function deleteGrant(id) {
+  S.grants = S.grants.filter((g) => g.id !== id);
+  store.set('grants', S.grants);
+  if (S.repo?.canWrite) publishGrants().catch(() => {});
+}
+
+/* =========================================================== session lock == */
+/**
+ * Idle / backgrounded-tab auto-lock, plus a hard stop at a temporary grant's
+ * expiry. This is the practical answer to "protect it from a coworker who
+ * walks up to my open laptop" — the passphrase screen alone doesn't help if
+ * the console is already unlocked and left unattended.
+ */
+let idleTimer = null, warnTimer = null, expiryWatchdog = null, hiddenSince = null;
+const AUTO_LOCK_EVENTS = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll'];
+
+async function activateSession() {
+  S.unlocked = true;
+  S.unlockFail = { count: 0, until: 0 };
+  store.remove('unlockThrottle');
+  await loadLocalRecords();
+  await loadGrants();
+  armAutoLock();
+  if (S.tempGrant) armExpiryWatchdog();
+  handleHash();
+  if (S.settings.autoSync && S.settings.token) syncNow({ silent: true });
+}
+
+function lockNow(reason = 'manual') {
+  disarmAutoLock();
+  disarmExpiryWatchdog();
+  S.unlocked = false;
+  S.privateJwk = null;
+  S.tempGrant = null;
+  renderLock();
+  const en = I18n.lang === 'en';
+  const msg = {
+    idle: en ? 'Locked after inactivity.' : 'Bloqueado por inactividad.',
+    hidden: en ? 'Locked — this tab was in the background too long.' : 'Bloqueado: esta pestaña estuvo en segundo plano mucho tiempo.',
+    expired: en ? 'Your temporary access has expired.' : 'Tu acceso temporal venció.',
+  }[reason];
+  if (msg) toast(msg, 'warn', 4500);
+}
+
+function armAutoLock() {
+  disarmAutoLock();
+  const minutes = Number(S.settings.autoLockMinutes);
+  if (!minutes || minutes <= 0) return;
+  const ms = minutes * 60000;
+  const warnAt = Math.max(1000, ms - 30000);
+
+  const reset = () => {
+    clearTimeout(idleTimer); clearTimeout(warnTimer);
+    warnTimer = setTimeout(showLockWarning, warnAt);
+    idleTimer = setTimeout(() => lockNow('idle'), ms);
+  };
+  AUTO_LOCK_EVENTS.forEach((ev) => document.addEventListener(ev, reset, { passive: true }));
+  document.addEventListener('visibilitychange', onVisibility);
+  reset();
+
+  S._autoLockCleanup = () => {
+    AUTO_LOCK_EVENTS.forEach((ev) => document.removeEventListener(ev, reset));
+    document.removeEventListener('visibilitychange', onVisibility);
+    clearTimeout(idleTimer); clearTimeout(warnTimer);
+  };
+}
+function disarmAutoLock() { S._autoLockCleanup?.(); S._autoLockCleanup = null; }
+
+function onVisibility() {
+  if (document.hidden) { hiddenSince = Date.now(); return; }
+  if (!hiddenSince) return;
+  const away = Date.now() - hiddenSince;
+  hiddenSince = null;
+  const minutes = Number(S.settings.autoLockMinutes);
+  // A background tab's timers get throttled or fully paused by the browser,
+  // so re-check elapsed wall-clock time on return instead of trusting idleTimer
+  // to have fired on schedule while hidden.
+  if (minutes > 0 && away >= minutes * 60000 && S.unlocked) lockNow('hidden');
+}
+
+function showLockWarning() {
+  const en = I18n.lang === 'en';
+  toast(en ? 'Locking soon due to inactivity — move the mouse to stay unlocked.'
+           : 'Se bloqueará pronto por inactividad — mueve el mouse para seguir dentro.', 'warn', 6000);
+}
+
+function armExpiryWatchdog() {
+  disarmExpiryWatchdog();
+  expiryWatchdog = setInterval(() => {
+    if (S.tempGrant && !isGrantUsable(S.tempGrant)) lockNow('expired');
+  }, 15000);
+}
+function disarmExpiryWatchdog() { clearInterval(expiryWatchdog); expiryWatchdog = null; }
+
 /* ============================================================== records == */
 async function loadLocalRecords() {
   S.records.clear();
@@ -275,6 +500,7 @@ async function syncNow({ silent = false } = {}) {
   setSync('busy', I18n.lang === 'en' ? 'Syncing…' : 'Sincronizando…');
   let pulled = 0, pushed = 0;
   try {
+    await pullGrants().catch(() => {});
     /* ---- pull ---------------------------------------------------------- */
     let names = [];
     if (S.repo.token) {
@@ -453,11 +679,12 @@ function paint() {
       el('button.btn.btn-outline.btn-sm.btn-block', { type: 'button', onclick: () => syncNow() },
         icon('refresh'), el('span', { text: en ? 'Sync now' : 'Sincronizar' })),
       el('button.btn.btn-ghost.btn-sm.btn-block', {
-        type: 'button', onclick: () => { S.unlocked = false; S.privateJwk = null; renderLock(); },
+        type: 'button', onclick: () => lockNow('manual'),
       }, icon('lock'), el('span', { text: en ? 'Lock' : 'Bloquear' })),
     ));
 
   const top = el('div.console-top',
+    S.tempGrant ? temporaryChip() : null,
     el('button.btn.btn-ghost.btn-icon.side-toggle', {
       type: 'button', 'aria-label': 'Menu', onclick: toggleSide,
     }, icon('menu')),
@@ -480,6 +707,20 @@ function paint() {
   root.append(el('div.console-shell', side, main));
   mountLauncher(root);
   renderBody();
+}
+
+function temporaryChip() {
+  const en = I18n.lang === 'en';
+  const g = S.tempGrant;
+  return el('div.temp-chip',
+    icon('clock'),
+    el('span', {
+      text: en
+        ? `Temporary access${g.label ? ' · ' + g.label : ''} — until ${fmtDate(g.expiresAt, I18n.lang, { dateStyle: 'short', timeStyle: 'short' })}`
+        : `Acceso temporal${g.label ? ' · ' + g.label : ''} — hasta ${fmtDate(g.expiresAt, I18n.lang, { dateStyle: 'short', timeStyle: 'short' })}`,
+    }),
+    el('button.btn.btn-ghost.btn-sm', { type: 'button', onclick: () => lockNow('manual') },
+      el('span', { text: en ? 'Lock now' : 'Bloquear ahora' })));
 }
 
 const toggleSide = () => {
@@ -1303,6 +1544,9 @@ function viewSettings() {
         icon('refresh'), el('span', { text: en ? 'Sync now' : 'Sincronizar ahora' }))),
     status)));
 
+  /* ---- security & access ---- */
+  wrap.append(securityCard());
+
   /* ---- keys ---- */
   wrap.append(card(en ? 'Encryption keys' : 'Claves de cifrado', el('div.stack.gap-4',
     el('p.text-sm.text-muted', {
@@ -1378,6 +1622,185 @@ function viewSettings() {
     }, icon('trash'), el('span', { text: en ? 'Wipe local data' : 'Borrar datos locales' })))));
 
   return wrap;
+}
+
+/* -------------------------------------------------------- security card -- */
+function securityCard() {
+  const en = I18n.lang === 'en';
+  const autoLockSel = el('select.select', {
+    onchange: (e) => { S.settings.autoLockMinutes = Number(e.target.value); saveSettings(); armAutoLock(); },
+  });
+  for (const m of [5, 10, 15, 20, 30, 60, 0]) {
+    autoLockSel.append(el('option', {
+      value: String(m), selected: Number(S.settings.autoLockMinutes) === m,
+      text: m === 0 ? (en ? 'Never (not recommended)' : 'Nunca (no recomendado)')
+                    : (en ? `${m} minutes` : `${m} minutos`),
+    }));
+  }
+
+  return card(en ? 'Security & access' : 'Seguridad y acceso', el('div.stack.gap-5',
+    el('div.field',
+      el('label.label', { text: en ? 'Lock automatically after' : 'Bloquear automáticamente tras' }),
+      autoLockSel,
+      el('p.help', {
+        text: en
+          ? 'Also locks if this tab sat in the background that long. Protects the console if you step away with it unlocked.'
+          : 'También bloquea si esta pestaña estuvo en segundo plano ese tiempo. Protege la consola si te alejas con ella desbloqueada.',
+      })),
+    el('div.divider'),
+    grantsSection(),
+  ));
+}
+
+function grantsSection() {
+  const en = I18n.lang === 'en';
+  const rows = [...S.grants].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  return el('div.stack.gap-3',
+    el('div.row.between.wrap.gap-2',
+      el('div.stack.gap-1',
+        el('strong', { text: en ? 'Temporary access codes' : 'Códigos de acceso temporal' }),
+        el('span.text-xs.text-subtle', {
+          text: en
+            ? 'Let someone use the console for a limited time, without ever sharing your real passphrase.'
+            : 'Deja que alguien use la consola por un tiempo limitado, sin compartir nunca tu contraseña real.',
+        })),
+      el('button.btn.btn-primary.btn-sm', { type: 'button', onclick: openCreateGrantDialog },
+        icon('plus'), el('span', { text: en ? 'New code' : 'Nuevo código' }))),
+    rows.length
+      ? el('div.grants-table', ...rows.map(grantRow))
+      : el('p.text-sm.text-subtle', { text: en ? 'No temporary codes yet.' : 'Aún no hay códigos temporales.' }),
+    !S.repo?.canWrite ? el('p.text-xs.text-subtle', {
+      text: en
+        ? 'Without a repository token, codes only work on this browser. Add one above so they also work on another device.'
+        : 'Sin un token de repositorio, los códigos solo funcionan en este navegador. Añade uno arriba para que también funcionen en otro dispositivo.',
+    }) : null,
+  );
+}
+
+function grantRow(g) {
+  const en = I18n.lang === 'en';
+  const status = grantStatus(g);
+  const badgeClass = { active: 'badge-ok', expired: 'badge', revoked: 'badge-danger' }[status];
+  const statusLabel = {
+    active: en ? 'Active' : 'Activo', expired: en ? 'Expired' : 'Vencido', revoked: en ? 'Revoked' : 'Revocado',
+  }[status];
+  return el('div.grant-row',
+    el('div.stack.gap-1.grow',
+      el('strong', { text: g.label || (en ? '(no label)' : '(sin etiqueta)') }),
+      el('span.text-xs.text-subtle', {
+        text: `${en ? 'Expires' : 'Vence'} ${fmtDate(g.expiresAt, I18n.lang, { dateStyle: 'medium', timeStyle: 'short' })}`,
+      })),
+    el('span.badge', { class: badgeClass, text: statusLabel }),
+    el('div.row.gap-1',
+      status === 'active' ? el('button.btn.btn-ghost.btn-sm', { type: 'button', onclick: () => confirmRevoke(g) },
+        el('span', { text: en ? 'Revoke' : 'Revocar' })) : null,
+      el('button.btn.btn-ghost.btn-icon.btn-sm', {
+        type: 'button', 'aria-label': t('common.delete'), onclick: () => confirmDeleteGrant(g),
+      }, icon('trash'))));
+}
+
+async function confirmRevoke(g) {
+  const en = I18n.lang === 'en';
+  const ok = await confirmDialog({
+    title: en ? 'Revoke this code?' : '¿Revocar este código?',
+    message: en
+      ? 'It stops working the next time anyone tries to unlock with it. A session already open with it stays open until it locks on its own.'
+      : 'Deja de funcionar la próxima vez que alguien intente desbloquear con él. Una sesión ya abierta con él sigue abierta hasta que se bloquee sola.',
+    danger: true,
+  });
+  if (!ok) return;
+  await revokeGrant(g.id);
+  renderBody();
+  toast(en ? 'Revoked.' : 'Revocado.', 'ok');
+}
+
+async function confirmDeleteGrant(g) {
+  const en = I18n.lang === 'en';
+  const ok = await confirmDialog({
+    title: en ? 'Delete this code from the list?' : '¿Eliminar este código de la lista?',
+    message: en
+      ? 'This only tidies the list — revoke it first if it might still be active.'
+      : 'Esto solo limpia la lista — revócalo antes si todavía podría estar activo.',
+  });
+  if (!ok) return;
+  deleteGrant(g.id);
+  renderBody();
+}
+
+function openCreateGrantDialog() {
+  const en = I18n.lang === 'en';
+  const labelInput = el('input.input', {
+    placeholder: en ? 'e.g. Covering for me Saturday' : 'Ej.: Cubriéndome el sábado', maxlength: 80,
+  });
+  const presetSel = el('select.select');
+  for (const p of EXPIRY_PRESETS) presetSel.append(el('option', { value: p.id, text: L(p.label) }));
+  const customInput = el('input.input.hidden', { type: 'datetime-local' });
+  presetSel.addEventListener('change', () => customInput.classList.toggle('hidden', presetSel.value !== 'custom'));
+
+  modal({
+    title: en ? 'New temporary code' : 'Nuevo código temporal',
+    body: el('div.stack.gap-4',
+      el('div.field', el('label.label', { text: en ? 'Label (optional)' : 'Etiqueta (opcional)' }), labelInput),
+      el('div.field', el('label.label', { text: en ? 'Expires in' : 'Vence en' }), presetSel, customInput),
+      el('div.callout.callout-info', el('span.ci', { text: 'ℹ️' }),
+        el('span', {
+          text: en
+            ? 'The code is generated automatically for security and is shown only once.'
+            : 'El código se genera automáticamente por seguridad y se muestra solo una vez.',
+        })),
+    ),
+    actions: [
+      { label: t('common.cancel'), variant: 'ghost' },
+      {
+        label: en ? 'Generate code' : 'Generar código', variant: 'primary',
+        onClick: async () => {
+          const preset = EXPIRY_PRESETS.find((p) => p.id === presetSel.value);
+          let expiresAt;
+          if (preset.id === 'custom') {
+            if (!customInput.value) { toast(en ? 'Pick a date and time.' : 'Elige fecha y hora.', 'warn'); return false; }
+            expiresAt = new Date(customInput.value).toISOString();
+            if (new Date(expiresAt).getTime() <= Date.now()) {
+              toast(en ? 'Pick a time in the future.' : 'Elige una hora futura.', 'warn');
+              return false;
+            }
+          } else {
+            expiresAt = new Date(Date.now() + preset.ms).toISOString();
+          }
+          const { code, published } = await createGrant({ label: labelInput.value.trim(), expiresAt });
+          showGrantCodeDialog(code, published);
+          renderBody();
+          return true;
+        },
+      },
+    ],
+  });
+}
+
+function showGrantCodeDialog(code, published) {
+  const en = I18n.lang === 'en';
+  modal({
+    title: en ? 'Temporary code created' : 'Código temporal creado',
+    dismissable: false,
+    body: el('div.stack.gap-4',
+      el('div.callout.callout-warn', el('span.ci', { text: '⚠️' }),
+        el('span', {
+          text: en
+            ? 'Shown once. Copy it now and share it out of band — WhatsApp, a call — never through this repository.'
+            : 'Se muestra una sola vez. Cópialo ahora y compártelo por otro canal — WhatsApp, una llamada — nunca a través de este repositorio.',
+        })),
+      el('div.access-code-blob', { text: code }),
+      el('div.row.gap-2',
+        el('button.btn.btn-sm', {
+          type: 'button', onclick: async () => { await copyText(code); toast(t('common.copied'), 'ok'); },
+        }, icon('copy'), el('span', { text: t('common.copy') }))),
+      el('p.text-xs.text-subtle', {
+        text: published
+          ? (en ? 'Published — this code also works from another device.' : 'Publicado: este código también funciona desde otro dispositivo.')
+          : (en ? 'Not published (no repository token) — this code only works on this browser.' : 'No publicado (sin token de repositorio): este código solo funciona en este navegador.'),
+      }),
+    ),
+    actions: [{ label: en ? "I've saved it" : 'Ya lo guardé', variant: 'primary' }],
+  });
 }
 
 /* ============================================================== dialogs == */

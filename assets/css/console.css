@@ -430,3 +430,39 @@
   border: 1px solid var(--border);
   color: var(--text-subtle);
 }
+
+/* =========================================================================
+   Access control — temporary session chip, throttle, temporary-code grants
+   ========================================================================= */
+.temp-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 10px 6px 12px;
+  border-radius: var(--r-full);
+  background: var(--warn-soft);
+  border: 1px solid color-mix(in srgb, var(--warn) 45%, transparent);
+  font-size: var(--fs-sm); font-weight: 650;
+  order: -1; flex: 1 1 100%;
+}
+.temp-chip svg { width: 15px; height: 15px; flex: none; color: var(--warn); }
+.temp-chip .btn { margin-left: auto; }
+@media (min-width: 720px) { .temp-chip { flex: 0 1 auto; order: 0; } }
+
+.grants-table { display: flex; flex-direction: column; gap: var(--sp-2); }
+.grant-row {
+  display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap;
+  padding: var(--sp-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--bg-inset);
+}
+
+.access-code-blob {
+  font-family: var(--font-mono);
+  font-size: 1.35rem; font-weight: 700; letter-spacing: 0.06em;
+  text-align: center;
+  padding: var(--sp-4);
+  border-radius: var(--r-sm);
+  background: var(--bg-sunken);
+  border: 1px dashed var(--border-strong);
+  word-break: break-all;
+}
