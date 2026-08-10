@@ -1,4 +1,4 @@
-# La Subasta Cubana · Centro de Asesoría
+# AuctionAssist · Centro de Asesoría
 
 Herramienta de trabajo para asesores de ventas: un **formulario dinámico** que
 levanta las necesidades del cliente y una **consola privada** donde se guardan,
@@ -54,8 +54,8 @@ que el repo puede ser público sin exponer a nadie.
 * **Menú flotante de plataformas** (botón *Plataformas*, o la tecla `P`): acceso
   en un clic a Copart, IAA, Manheim, ACV, ADESA, bid.cars, AutoAstat, SCA,
   Carfax, AutoCheck, el decodificador VIN de la NHTSA, NICB VINCheck, KBB,
-  Edmunds, Super Dispatch, Central Dispatch, FMCSA y el propio sitio de
-  La Subasta Cubana (inventario, calculadora, tarifas, cómo comprar).
+  Edmunds, Super Dispatch, Central Dispatch, FMCSA y tu propio sitio (nombre y
+  URL vienen de `config.js`).
   Con un cliente abierto los enlaces se rellenan solos con su marca y modelo, y
   si algún lote guardado trae VIN saltan directo al VIN. Clic derecho copia el
   enlace.

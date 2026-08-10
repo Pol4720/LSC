@@ -22,12 +22,13 @@ const DEFAULTS = {
    */
   relayUrl: '',
 
-  /** Contact fallbacks shown on the success screen. Digits only for WhatsApp. */
-  advisorWhatsApp: '17866002222',
-  advisorEmail: 'info@rostrosmagazine.com',
+  /** Contact fallbacks shown on the success screen. Digits only for WhatsApp.
+   *  Replace both with your own before deploying — these are placeholders. */
+  advisorWhatsApp: '15555550100',
+  advisorEmail: 'advisor@example.com',
 
-  /** Brand surface. */
-  brandName: 'La Subasta Cubana',
+  /** Brand surface — replace with your own trading name and site. */
+  brandName: 'AuctionAssist',
   siteUrl: 'https://pol4720.github.io/LSC/',
 };
 

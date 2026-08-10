@@ -1,9 +1,9 @@
 {
-  "name": "lsc",
+  "name": "auctionassist",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "La Subasta Cubana · client intake form and advisor console",
+  "description": "AuctionAssist · client intake form and advisor console for vehicle-auction brokers",
   "scripts": {
     "dev": "node scripts/serve.mjs",
     "test": "node --test \"tests/unit/**/*.test.mjs\"",

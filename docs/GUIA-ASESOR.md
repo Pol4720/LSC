@@ -165,7 +165,7 @@ Dentro está todo lo que abres en un día de trabajo, agrupado:
 
 | Grupo | Qué hay |
 |---|---|
-| **La Subasta Cubana** | Sitio, inventario, calculadora oficial, precios y tarifas, cómo comprar |
+| **Tu sitio** | Tu página principal y tu calculadora, según lo configurado en `config.js` |
 | **Subastas** | Copart, IAA, Manheim, ACV, ADESA, bid.cars, AutoAstat, SCA |
 | **Historial y valoración** | Carfax, AutoCheck, decodificador VIN de la NHTSA, NICB VINCheck, KBB, Edmunds |
 | **Transporte** | Super Dispatch, Super Dispatch Shipper, Central Dispatch, FMCSA SAFER |

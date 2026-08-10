@@ -262,7 +262,7 @@ export function fmtRelative(iso, lang = 'es') {
 /* ---------------------------------------------------------------- i18n --- */
 export const UI = {
   es: {
-    'app.name': 'La Subasta Cubana',
+    'app.name': 'AuctionAssist',
     'app.tool': 'Centro de Asesoría',
     'nav.form': 'Formulario',
     'nav.console': 'Consola',
@@ -320,7 +320,7 @@ export const UI = {
     'err.fixFields': 'Revisa los campos marcados para continuar',
   },
   en: {
-    'app.name': 'La Subasta Cubana',
+    'app.name': 'AuctionAssist',
     'app.tool': 'Advisory Center',
     'nav.form': 'Form',
     'nav.console': 'Console',

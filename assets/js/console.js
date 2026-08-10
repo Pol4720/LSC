@@ -659,7 +659,7 @@ function paint() {
     el('div.brand',
       el('span.brand-mark', icon('gavel')),
       el('span.brand-text',
-        el('span.brand-name', { text: 'La Subasta Cubana' }),
+        el('span.brand-name', { text: CONFIG.brandName }),
         el('span.brand-sub', { text: en ? 'Advisor console' : 'Consola del asesor' }))),
     el('nav.side-nav',
       nav('dashboard', 'chart', en ? 'Dashboard' : 'Panel'),
@@ -1149,8 +1149,8 @@ const waGreeting = (rec) => {
   const en = I18n.lang === 'en';
   const first = String(deepGet(rec.data, 'contact.fullName') || '').split(/\s+/)[0] || '';
   return en
-    ? `Hi ${first}! This is your advisor at La Subasta Cubana. I reviewed your request (${rec.id}) and I have options for you.`
-    : `¡Hola ${first}! Soy tu asesor de La Subasta Cubana. Revisé tu solicitud (${rec.id}) y tengo opciones para ti.`;
+    ? `Hi ${first}! This is your advisor at ${CONFIG.brandName}. I reviewed your request (${rec.id}) and I have options for you.`
+    : `¡Hola ${first}! Soy tu asesor de ${CONFIG.brandName}. Revisé tu solicitud (${rec.id}) y tengo opciones para ti.`;
 };
 
 function tabProfile(rec) {
