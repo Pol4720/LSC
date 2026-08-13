@@ -1,0 +1,258 @@
+[
+  {
+    "id": "BID-001",
+    "clientId": "CLI-001",
+    "vehicleId": "VEH-022",
+    "amount": 14625,
+    "status": "lost",
+    "placedAt": "2026-08-07T15:10:00.000Z"
+  },
+  {
+    "id": "BID-002",
+    "clientId": "CLI-001",
+    "vehicleId": "VEH-022",
+    "amount": 14425,
+    "status": "lost",
+    "placedAt": "2026-08-07T20:48:00.000Z"
+  },
+  {
+    "id": "BID-003",
+    "clientId": "CLI-001",
+    "vehicleId": "VEH-017",
+    "amount": 14250,
+    "status": "lost",
+    "placedAt": "2026-08-01T18:30:00.000Z"
+  },
+  {
+    "id": "BID-004",
+    "clientId": "CLI-002",
+    "vehicleId": "VEH-009",
+    "amount": 16625,
+    "status": "lost",
+    "placedAt": "2026-08-09T13:13:00.000Z"
+  },
+  {
+    "id": "BID-005",
+    "clientId": "CLI-002",
+    "vehicleId": "VEH-007",
+    "amount": 22875,
+    "status": "lost",
+    "placedAt": "2026-08-03T17:12:00.000Z"
+  },
+  {
+    "id": "BID-006",
+    "clientId": "CLI-003",
+    "vehicleId": "VEH-008",
+    "amount": 5650,
+    "status": "outbid",
+    "placedAt": "2026-08-05T09:00:00.000Z"
+  },
+  {
+    "id": "BID-007",
+    "clientId": "CLI-003",
+    "vehicleId": "VEH-007",
+    "amount": 24500,
+    "status": "outbid",
+    "placedAt": "2026-08-01T09:07:00.000Z"
+  },
+  {
+    "id": "BID-008",
+    "clientId": "CLI-004",
+    "vehicleId": "VEH-013",
+    "amount": 26350,
+    "status": "outbid",
+    "placedAt": "2026-08-03T11:57:00.000Z"
+  },
+  {
+    "id": "BID-009",
+    "clientId": "CLI-004",
+    "vehicleId": "VEH-012",
+    "amount": 6050,
+    "status": "outbid",
+    "placedAt": "2026-08-01T10:09:00.000Z"
+  },
+  {
+    "id": "BID-010",
+    "clientId": "CLI-005",
+    "vehicleId": "VEH-012",
+    "amount": 7700,
+    "status": "winning",
+    "placedAt": "2026-08-02T15:04:00.000Z"
+  },
+  {
+    "id": "BID-011",
+    "clientId": "CLI-005",
+    "vehicleId": "VEH-008",
+    "amount": 5725,
+    "status": "outbid",
+    "placedAt": "2026-08-04T08:38:00.000Z"
+  },
+  {
+    "id": "BID-012",
+    "clientId": "CLI-006",
+    "vehicleId": "VEH-006",
+    "amount": 24425,
+    "status": "outbid",
+    "placedAt": "2026-08-07T09:24:00.000Z"
+  },
+  {
+    "id": "BID-013",
+    "clientId": "CLI-006",
+    "vehicleId": "VEH-002",
+    "amount": 10400,
+    "status": "won",
+    "placedAt": "2026-08-11T20:18:00.000Z"
+  },
+  {
+    "id": "BID-014",
+    "clientId": "CLI-006",
+    "vehicleId": "VEH-018",
+    "amount": 7100,
+    "status": "winning",
+    "placedAt": "2026-08-11T09:31:00.000Z"
+  },
+  {
+    "id": "BID-015",
+    "clientId": "CLI-007",
+    "vehicleId": "VEH-012",
+    "amount": 6200,
+    "status": "lost",
+    "placedAt": "2026-08-01T17:53:00.000Z"
+  },
+  {
+    "id": "BID-016",
+    "clientId": "CLI-007",
+    "vehicleId": "VEH-022",
+    "amount": 11850,
+    "status": "outbid",
+    "placedAt": "2026-08-03T10:11:00.000Z"
+  },
+  {
+    "id": "BID-017",
+    "clientId": "CLI-008",
+    "vehicleId": "VEH-019",
+    "amount": 11700,
+    "status": "outbid",
+    "placedAt": "2026-08-09T12:56:00.000Z"
+  },
+  {
+    "id": "BID-018",
+    "clientId": "CLI-008",
+    "vehicleId": "VEH-004",
+    "amount": 17750,
+    "status": "lost",
+    "placedAt": "2026-08-11T11:20:00.000Z"
+  },
+  {
+    "id": "BID-019",
+    "clientId": "CLI-009",
+    "vehicleId": "VEH-005",
+    "amount": 20525,
+    "status": "lost",
+    "placedAt": "2026-08-04T12:44:00.000Z"
+  },
+  {
+    "id": "BID-020",
+    "clientId": "CLI-009",
+    "vehicleId": "VEH-013",
+    "amount": 30675,
+    "status": "winning",
+    "placedAt": "2026-08-10T08:07:00.000Z"
+  },
+  {
+    "id": "BID-021",
+    "clientId": "CLI-009",
+    "vehicleId": "VEH-014",
+    "amount": 5725,
+    "status": "winning",
+    "placedAt": "2026-08-06T08:16:00.000Z"
+  },
+  {
+    "id": "BID-022",
+    "clientId": "CLI-010",
+    "vehicleId": "VEH-019",
+    "amount": 13275,
+    "status": "outbid",
+    "placedAt": "2026-08-04T15:17:00.000Z"
+  },
+  {
+    "id": "BID-023",
+    "clientId": "CLI-010",
+    "vehicleId": "VEH-011",
+    "amount": 7025,
+    "status": "outbid",
+    "placedAt": "2026-08-04T10:29:00.000Z"
+  },
+  {
+    "id": "BID-024",
+    "clientId": "CLI-010",
+    "vehicleId": "VEH-024",
+    "amount": 3900,
+    "status": "won",
+    "placedAt": "2026-08-07T15:09:00.000Z"
+  },
+  {
+    "id": "BID-025",
+    "clientId": "CLI-011",
+    "vehicleId": "VEH-018",
+    "amount": 6100,
+    "status": "outbid",
+    "placedAt": "2026-08-07T08:55:00.000Z"
+  },
+  {
+    "id": "BID-026",
+    "clientId": "CLI-011",
+    "vehicleId": "VEH-006",
+    "amount": 22600,
+    "status": "outbid",
+    "placedAt": "2026-08-12T17:42:00.000Z"
+  },
+  {
+    "id": "BID-027",
+    "clientId": "CLI-012",
+    "vehicleId": "VEH-001",
+    "amount": 8075,
+    "status": "winning",
+    "placedAt": "2026-08-08T09:21:00.000Z"
+  },
+  {
+    "id": "BID-028",
+    "clientId": "CLI-012",
+    "vehicleId": "VEH-004",
+    "amount": 15200,
+    "status": "lost",
+    "placedAt": "2026-08-09T16:35:00.000Z"
+  },
+  {
+    "id": "BID-029",
+    "clientId": "CLI-012",
+    "vehicleId": "VEH-017",
+    "amount": 13700,
+    "status": "won",
+    "placedAt": "2026-08-04T14:06:00.000Z"
+  },
+  {
+    "id": "BID-030",
+    "clientId": "CLI-007",
+    "vehicleId": "VEH-002",
+    "amount": 11425,
+    "status": "winning",
+    "placedAt": "2026-08-03T15:06:00.000Z"
+  },
+  {
+    "id": "BID-031",
+    "clientId": "CLI-011",
+    "vehicleId": "VEH-022",
+    "amount": 13075,
+    "status": "lost",
+    "placedAt": "2026-08-06T13:47:00.000Z"
+  },
+  {
+    "id": "BID-032",
+    "clientId": "CLI-012",
+    "vehicleId": "VEH-015",
+    "amount": 17250,
+    "status": "winning",
+    "placedAt": "2026-08-05T13:04:00.000Z"
+  }
+]

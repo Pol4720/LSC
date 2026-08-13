@@ -21,8 +21,8 @@ import { CONFIG } from './config.js';
 import { STEPS, visibleFields, SCHEMA_VERSION } from './schema.js';
 import { renderField } from './fields.js';
 import { summarize, headline, deriveProfile } from './summary.js';
-import { PIPELINE_STAGES, PRIORITIES, BODY_TYPES, byId, parseLotUrl, isValidVin } from './catalogs.js';
-import { DEFAULT_FEES } from './fees.js';
+import { PIPELINE_STAGES, PRIORITIES, BODY_TYPES, AUCTIONS, byId, parseLotUrl, isValidVin } from './catalogs.js';
+import { DEFAULT_FEES, LINE_LABELS } from './fees.js';
 import { calculatorPanel } from './calculator.js';
 import {
   toCsv, toLongCsv, toJson, toVCards, toMarkdownAll, toMarkdown, toPlainText,
@@ -34,6 +34,12 @@ import {
   computeBackoffMs, secondsRemaining, EXPIRY_PRESETS, generateAccessCode,
   grantStatus, isGrantUsable, mergeGrants, withTimeout,
 } from './access.js';
+import {
+  loadDemoData, vehicleLabel, auctionLabel, titleLabel, validateBid, placeBid,
+  performanceSummary,
+} from './demo.js';
+import { start as startTour } from './tour.js';
+import { buildQuotePdf } from './pdf.js';
 
 const store = createStore('console');
 
@@ -74,6 +80,9 @@ function rebuildRepo() {
 }
 
 let root;
+/** Interactive demo state — entirely separate from the real session (S):
+ *  in-memory only, no vault, no token, no records ever touched. */
+let D = null;
 
 /* ================================================================ boot === */
 export async function boot(mount) {
@@ -196,8 +205,23 @@ function renderLock() {
           text: en ? 'Restore a backup' : 'Restaurar un respaldo',
         }),
         buildToolbar().node),
+      demoEntryCard(),
     )));
   setTimeout(() => pass.focus(), 80);
+}
+
+/** A no-account, no-token sandbox with fictional data — reachable from either
+ *  the lock or the first-run setup screen, so the product can be tried in a
+ *  few minutes before configuring anything real. */
+function demoEntryCard() {
+  const en = I18n.lang === 'en';
+  return el('div.demo-entry',
+    el('span.demo-badge', icon('sparkles'), el('span', { text: en ? 'No account needed' : 'Sin necesidad de cuenta' })),
+    el('p.text-muted', { text: en
+      ? 'Try the full product in about five minutes with a fictional dataset — vehicles, clients and bids. No key, no token, nothing to configure.'
+      : 'Prueba el producto completo en unos cinco minutos con datos ficticios — vehículos, clientes y pujas. Sin clave, sin token, sin nada que configurar.' }),
+    el('button.btn.btn-outline.btn-block', { type: 'button', onclick: enterDemo },
+      icon('sparkles'), el('span', { text: en ? 'Try the interactive demo' : 'Probar la demo interactiva' })));
 }
 
 function renderSetup() {
@@ -274,6 +298,7 @@ function renderSetup() {
         }) : null,
         buildToolbar().node),
       fileInput,
+      demoEntryCard(),
     )));
 }
 
@@ -1946,5 +1971,404 @@ function printRecord(record) {
   w.addEventListener('load', () => setTimeout(() => w.print(), 220));
 }
 
+/* =========================================================================
+   Interactive demo — mock vehicles, clients and simulated bids
+   ---------------------------------------------------------------------------
+   A separate, isolated shell: reachable from the lock/setup screens without
+   any key, token or real record ever loading. State lives only in the module
+   variable D for the lifetime of the tab.
+   ========================================================================= */
+async function enterDemo() {
+  const en = I18n.lang === 'en';
+  try {
+    const data = await loadDemoData();
+    D = {
+      vehicles: data.vehicles, clients: data.clients, bids: data.bids,
+      view: 'home', selectedVehicleId: null, selectedClientId: null, bidAmount: 0,
+    };
+    paintDemo();
+  } catch (e) {
+    console.error('[LSC] demo dataset failed to load', e);
+    toast(en ? 'Could not load the demo dataset.' : 'No se pudo cargar el conjunto de datos de la demo.', 'danger', 5000);
+  }
+}
+
+function exitDemo() { D = null; store.get('vault', null) ? renderLock() : renderSetup(); }
+function goDemo(view) { D.view = view; paintDemo(); }
+
+function paintDemo() {
+  clear(root);
+  const en = I18n.lang === 'en';
+  const tools = buildToolbar({ onLang: () => paintDemo(), onTheme: () => paintDemo() });
+
+  const navItem = (id, iconName, label) => el('button.side-link', {
+    type: 'button', 'aria-current': D.view === id ? 'page' : null,
+    onclick: () => { goDemo(id); closeSide(); },
+  }, icon(iconName), el('span.grow', { text: label }));
+
+  const side = el('aside.side',
+    el('div.brand',
+      el('span.brand-mark', icon('sparkles')),
+      el('span.brand-text',
+        el('span.brand-name', { text: CONFIG.brandName }),
+        el('span.brand-sub', { text: en ? 'Interactive demo' : 'Demo interactiva' }))),
+    el('nav.side-nav',
+      navItem('home', 'star', en ? 'Home' : 'Inicio'),
+      navItem('dashboard', 'chart', en ? 'Dashboard' : 'Panel'),
+      navItem('autos', 'car', en ? 'Cars' : 'Autos'),
+      navItem('clients', 'user', en ? 'Clients' : 'Clientes'),
+      navItem('simulation', 'gavel', en ? 'Simulation' : 'Simulación'),
+      navItem('reports', 'file', en ? 'Reports' : 'Reportes')),
+    el('div.side-foot',
+      el('button.btn.btn-outline.btn-sm.btn-block', { type: 'button', onclick: startGuidedTour },
+        icon('sparkles'), el('span', { text: en ? 'Guided tour' : 'Recorrido guiado' })),
+      el('button.btn.btn-ghost.btn-sm.btn-block', { type: 'button', onclick: exitDemo },
+        icon('arrowLeft'), el('span', { text: en ? 'Exit demo' : 'Salir de la demo' }))));
+
+  const top = el('div.console-top',
+    el('span.demo-badge', icon('sparkles'), el('span', { text: en ? 'DEMO · fictional data' : 'DEMO · datos ficticios' })),
+    el('button.btn.btn-ghost.btn-icon.side-toggle', {
+      type: 'button', 'aria-label': 'Menu', onclick: toggleSide,
+    }, icon('menu')),
+    el('div.grow'),
+    tools.node);
+
+  const main = el('main.console-main', top, el('div.console-body', { id: 'view-body' }));
+  root.append(el('div.console-shell', side, main));
+  renderDemoBody();
+}
+
+function renderDemoBody() {
+  const body = $('#view-body');
+  if (!body) return;
+  clear(body);
+  const views = {
+    home: demoHome, dashboard: demoDashboard, autos: demoAutos,
+    clients: demoClients, simulation: demoSimulation, reports: demoReports,
+  };
+  body.append((views[D.view] || demoHome)());
+}
+
+function demoHome() {
+  const en = I18n.lang === 'en';
+  const perf = performanceSummary(D);
+  return el('section',
+    el('div.page-head', el('div',
+      el('h1', { text: en ? `Welcome to the ${CONFIG.brandName} demo` : `Bienvenido a la demo de ${CONFIG.brandName}` }),
+      el('p', { text: en
+        ? 'Every car, client and bid here is fictional. Try the full flow in about five minutes.'
+        : 'Cada auto, cliente y puja aquí es ficticio. Prueba el flujo completo en unos cinco minutos.' }))),
+    el('div.demo-entry',
+      el('span.demo-badge', icon('sparkles'), el('span', { text: en ? 'Guided tour' : 'Recorrido guiado' })),
+      el('p.text-muted', { text: en
+        ? 'Browse a car, simulate a bid, watch the all-in cost update live, generate a PDF quote and check the advisor dashboard.'
+        : 'Explora un auto, simula una puja, mira el costo total actualizarse en vivo, genera una cotización en PDF y revisa el panel del asesor.' }),
+      el('button.btn.btn-primary', { type: 'button', onclick: startGuidedTour },
+        icon('sparkles'), el('span', { text: en ? 'Start the guided tour' : 'Iniciar el recorrido' }))),
+    el('div.stat-grid', { style: { marginTop: 'var(--sp-5)' } },
+      statTile({ label: en ? 'Sample vehicles' : 'Vehículos de ejemplo', value: fmtNumber(D.vehicles.length, I18n.lang) }),
+      statTile({ label: en ? 'Sample clients' : 'Clientes de ejemplo', value: fmtNumber(D.clients.length, I18n.lang) }),
+      statTile({ label: en ? 'Historical bids' : 'Pujas históricas', value: fmtNumber(D.bids.length, I18n.lang) }),
+      statTile({ label: en ? 'Estimated earnings' : 'Ganancias estimadas', value: fmtMoney(perf.estimatedEarnings, { lang: I18n.lang, compact: true }), tone: 'brand' })),
+    el('div.row.gap-3.wrap', { style: { marginTop: 'var(--sp-5)' } },
+      el('button.btn', { type: 'button', onclick: () => goDemo('autos') }, icon('car'), el('span', { text: en ? 'Browse cars' : 'Ver autos' })),
+      el('button.btn', { type: 'button', onclick: () => goDemo('simulation') }, icon('gavel'), el('span', { text: en ? 'Simulate a bid' : 'Simular una puja' })),
+      el('button.btn', { type: 'button', onclick: () => goDemo('reports') }, icon('chart'), el('span', { text: en ? 'Advisor dashboard' : 'Panel del asesor' }))));
+}
+
+function demoDashboard() {
+  const en = I18n.lang === 'en';
+  const perf = performanceSummary(D);
+  const stageRows = PIPELINE_STAGES.map((s) => ({
+    label: `${s.emoji} ${L(s.label)}`,
+    value: D.clients.filter((c) => c.stage === s.id).length,
+  }));
+  const auctionRows = AUCTIONS.filter((a) => a.id !== 'other').map((a) => ({
+    label: `${a.emoji} ${L(a.label)}`,
+    value: D.vehicles.filter((v) => v.source === a.id).length,
+  }));
+  return el('section',
+    el('div.page-head', el('div',
+      el('h1', { text: en ? 'Dashboard' : 'Panel' }),
+      el('p', { text: en ? 'Portfolio snapshot on the demo dataset.' : 'Vista de la cartera sobre el conjunto de datos de la demo.' }))),
+    el('div.stat-grid',
+      statTile({ label: en ? 'Total clients' : 'Clientes totales', value: fmtNumber(perf.clientCount, I18n.lang) }),
+      statTile({ label: en ? 'Cars sold' : 'Autos vendidos', value: fmtNumber(perf.carsSold, I18n.lang), tone: 'ok' }),
+      statTile({ label: en ? 'Active bids' : 'Pujas activas', value: fmtNumber(perf.activeBids, I18n.lang), tone: 'warn' }),
+      statTile({ label: en ? 'Estimated earnings' : 'Ganancias estimadas', value: fmtMoney(perf.estimatedEarnings, { lang: I18n.lang, compact: true }), tone: 'brand' })),
+    el('div.chart-grid',
+      card(en ? 'Client pipeline' : 'Embudo de clientes', barChart(stageRows)),
+      card(en ? 'Inventory by auction' : 'Inventario por subasta', barChart(auctionRows))));
+}
+
+function demoAutos() {
+  const en = I18n.lang === 'en';
+  const wrap = el('section');
+  wrap.append(el('div.page-head', el('div',
+    el('h1', { text: en ? 'Cars' : 'Autos' }),
+    el('p', { text: en ? `${D.vehicles.length} sample lots across four auctions.` : `${D.vehicles.length} lotes de ejemplo en cuatro subastas.` }))));
+
+  const grid = el('div.vehicle-grid');
+  D.vehicles.forEach((v, i) => {
+    grid.append(el(i === 0 ? 'div#tour-first-vehicle.vehicle-card' : 'div.vehicle-card',
+      el('span.vehicle-thumb', { text: v.thumb, 'aria-hidden': 'true' }),
+      el('span.vehicle-title', { text: vehicleLabel(v) }),
+      el('div.vehicle-meta',
+        el('span.badge', { text: auctionLabel(v.source) }),
+        el('span.badge', { text: titleLabel(v.titleType, I18n.lang) }),
+        el('span.badge', { text: `${fmtNumber(v.odometer, I18n.lang)} mi` })),
+      el('div.vehicle-price-row',
+        el('span.text-xs.text-subtle', { text: en ? 'Current bid' : 'Puja actual' }),
+        el('span.price', { text: fmtMoney(v.currentBid, { lang: I18n.lang }) })),
+      el('button.btn.btn-primary.btn-block.btn-sm', {
+        type: 'button',
+        onclick: () => { D.selectedVehicleId = v.id; goDemo('simulation'); },
+      }, icon('gavel'), el('span', { text: en ? 'Simulate a bid' : 'Simular puja' }))));
+  });
+  wrap.append(grid);
+  return wrap;
+}
+
+function demoClients() {
+  const en = I18n.lang === 'en';
+  const wrap = el('section');
+  wrap.append(el('div.page-head', el('div',
+    el('h1', { text: en ? 'Clients' : 'Clientes' }),
+    el('p', { text: en ? `${D.clients.length} sample clients.` : `${D.clients.length} clientes de ejemplo.` }))));
+
+  const grid = el('div.client-grid');
+  for (const c of D.clients) {
+    const stage = byId(PIPELINE_STAGES, c.stage);
+    const prio = byId(PRIORITIES, c.priority);
+    grid.append(el('div.client-card',
+      el('div.cc-top',
+        el('div.avatar', { text: initials(c.name), 'aria-hidden': 'true' }),
+        el('div.grow.stack.gap-1',
+          el('span.cc-name', { text: c.name }),
+          el('span.cc-sub', { text: `${c.city}, ${c.state} · ${fmtMoney(c.budget, { lang: I18n.lang, compact: true })}` }))),
+      el('div.cc-meta',
+        stage ? el('span.badge', { class: `badge-${stage.color}` }, el('span.dot'), el('span', { text: L(stage.label) })) : null,
+        prio ? el('span.badge', { text: `${prio.emoji} ${L(prio.label)}` }) : null),
+      el('button.btn.btn-sm.btn-block', {
+        type: 'button',
+        onclick: () => { D.selectedClientId = c.id; goDemo('simulation'); },
+      }, icon('gavel'), el('span', { text: en ? 'Simulate a bid for them' : 'Simular una puja para él/ella' }))));
+  }
+  wrap.append(grid);
+  return wrap;
+}
+
+function demoSimulation() {
+  const en = I18n.lang === 'en';
+  const wrap = el('section');
+  wrap.append(el('div.page-head', el('div',
+    el('h1', { text: en ? 'Bid simulation' : 'Simulación de puja' }),
+    el('p', { text: en
+      ? 'Pick a car, place a simulated bid and watch the all-in cost update live.'
+      : 'Elige un auto, simula una puja y mira el costo total actualizarse en vivo.' }))));
+
+  if (!D.selectedVehicleId) D.selectedVehicleId = D.vehicles[0].id;
+  const vehicle = D.vehicles.find((v) => v.id === D.selectedVehicleId) || D.vehicles[0];
+
+  const vehicleSel = el('select.select', {
+    'aria-label': en ? 'Vehicle' : 'Vehículo',
+    onchange: (e) => { D.selectedVehicleId = e.target.value; D.bidAmount = 0; renderDemoBody(); },
+  });
+  for (const v of D.vehicles) {
+    vehicleSel.append(el('option', {
+      value: v.id, selected: v.id === vehicle.id,
+      text: `${vehicleLabel(v)} · ${auctionLabel(v.source)}`,
+    }));
+  }
+
+  const clientSel = el('select.select', {
+    'aria-label': en ? 'Client' : 'Cliente',
+    onchange: (e) => { D.selectedClientId = e.target.value || null; },
+  });
+  clientSel.append(el('option', { value: '', text: en ? '— No client —' : '— Sin cliente —' }));
+  for (const c of D.clients) {
+    clientSel.append(el('option', { value: c.id, selected: c.id === D.selectedClientId, text: c.name }));
+  }
+
+  const minBid = vehicle.currentBid + 25;
+  if (!D.bidAmount) D.bidAmount = minBid;
+  const bidInput = el('input#tour-bid-input.input', {
+    type: 'number', min: minBid, step: 25, value: D.bidAmount, inputmode: 'numeric',
+    oninput: (e) => { D.bidAmount = Number(e.target.value) || 0; paintValidation(); refreshCost(); },
+  });
+
+  const validationBox = el('div.sim-result');
+  const validationMessages = {
+    invalid: en ? 'Enter a valid amount.' : 'Escribe un monto válido.',
+    increment: en ? 'Bids move in $25 increments.' : 'Las pujas suben de $25 en $25.',
+    tooLow: en ? `Must beat the current bid of ${fmtMoney(vehicle.currentBid, { lang: I18n.lang })}.`
+               : `Debe superar la puja actual de ${fmtMoney(vehicle.currentBid, { lang: I18n.lang })}.`,
+    tooHigh: en ? 'That is far above this car’s estimated value.' : 'Eso está muy por encima del valor estimado del auto.',
+  };
+  function paintValidation() {
+    const err = validateBid(vehicle, D.bidAmount);
+    clear(validationBox);
+    validationBox.className = `sim-result ${err ? 'warn' : 'ok'}`;
+    validationBox.append(icon(err ? 'warn' : 'check'), el('span', {
+      text: err ? validationMessages[err] : (en ? 'Valid bid — ready to place.' : 'Puja válida — lista para colocarse.'),
+    }));
+  }
+  paintValidation();
+
+  const placeBtn = el('button.btn.btn-primary.btn-block', {
+    type: 'button',
+    onclick: () => {
+      const err = validateBid(vehicle, D.bidAmount);
+      if (err) { paintValidation(); return; }
+      const bid = placeBid(D, { vehicleId: vehicle.id, clientId: D.selectedClientId, amount: D.bidAmount });
+      toast(
+        bid.status === 'winning'
+          ? (en ? 'Bid placed — you are leading.' : 'Puja colocada — vas a la cabeza.')
+          : (en ? 'Bid placed — outbid immediately by the reserve.' : 'Puja colocada — superada de inmediato por la reserva.'),
+        bid.status === 'winning' ? 'ok' : 'warn');
+      renderDemoBody();
+    },
+  }, icon('gavel'), el('span', { text: en ? 'Place simulated bid' : 'Colocar puja simulada' }));
+
+  const left = el('div.card.card-solid.card-pad.stack.gap-4',
+    el('div.row.gap-3',
+      el('span.vehicle-thumb', { text: vehicle.thumb, 'aria-hidden': 'true' }),
+      el('div', el('h3', { text: vehicleLabel(vehicle) }),
+        el('span.text-xs.text-subtle', { text: `VIN ${vehicle.vin} · Lot ${vehicle.lot}` }))),
+    el('div.vehicle-meta',
+      el('span.badge', { text: auctionLabel(vehicle.source) }),
+      el('span.badge', { text: titleLabel(vehicle.titleType, I18n.lang) }),
+      el('span.badge', { text: fmtMoney(vehicle.currentBid, { lang: I18n.lang }) + (en ? ' current' : ' actual') })),
+    el('div.field', el('label.label', { text: en ? 'Vehicle' : 'Vehículo' }), vehicleSel),
+    el('div.field', el('label.label', { text: en ? 'Client (optional)' : 'Cliente (opcional)' }), clientSel),
+    el('div.field', el('label.label', { text: en ? 'Your bid' : 'Tu puja' }),
+      el('div.sim-bid-row', el('div.input-affix.has-prefix', el('span.prefix', { text: '$' }), bidInput))),
+    validationBox,
+    placeBtn);
+
+  let costHost = calculatorPanel(
+    { mode: 'hammer', hammer: D.bidAmount, auction: vehicle.source },
+    { fees: S.fees, onSave: (_text, result) => downloadQuotePdf(vehicle, result), saveLabel: en ? 'Download PDF quote' : 'Descargar cotización PDF' },
+  );
+  const right = el('div', costHost);
+  function refreshCost() {
+    const fresh = calculatorPanel(
+      { mode: 'hammer', hammer: D.bidAmount, auction: vehicle.source },
+      { fees: S.fees, onSave: (_text, result) => downloadQuotePdf(vehicle, result), saveLabel: en ? 'Download PDF quote' : 'Descargar cotización PDF' },
+    );
+    clear(right);
+    right.append(fresh);
+  }
+
+  wrap.append(el('div.sim-grid', left, right));
+  return wrap;
+}
+
+function downloadQuotePdf(vehicle, result) {
+  const en = I18n.lang === 'en';
+  const client = D.clients.find((c) => c.id === D.selectedClientId);
+  const lines = result.estimate.lines
+    .filter((l) => l.id !== 'hammer')
+    .map((l) => [L(LINE_LABELS[l.id] || { es: l.id, en: l.id }), fmtMoney(l.amount, { lang: I18n.lang })]);
+
+  const blob = buildQuotePdf({
+    brandName: CONFIG.brandName, lang: I18n.lang,
+    client: client ? `${client.name} · ${client.city}, ${client.state}` : null,
+    vehicle: `${vehicleLabel(vehicle)} · VIN ${vehicle.vin} · Lot ${vehicle.lot} (${auctionLabel(vehicle.source)})`,
+    lines,
+    total: fmtMoney(result.estimate.total, { lang: I18n.lang }),
+    maxBid: fmtMoney(result.maxBid, { lang: I18n.lang }),
+    quoteId: `Q-${Date.now().toString(36).toUpperCase()}`,
+    issuedAt: fmtDate(new Date().toISOString(), I18n.lang, { dateStyle: 'long', timeStyle: 'short' }),
+  });
+  const url = URL.createObjectURL(blob);
+  const a = el('a', { href: url, download: `cotizacion-${vehicle.id}.pdf` });
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+  toast(en ? 'Quote PDF downloaded.' : 'Cotización PDF descargada.', 'ok');
+}
+
+function demoReports() {
+  const en = I18n.lang === 'en';
+  const perf = performanceSummary(D);
+  const wrap = el('section');
+  wrap.append(el('div.page-head', el('div',
+    el('h1', { text: en ? 'Reports' : 'Reportes' }),
+    el('p', { text: en ? 'Advisor performance on the demo portfolio.' : 'Desempeño del asesor sobre la cartera de la demo.' }))));
+
+  wrap.append(el('div#tour-stats.stat-grid',
+    statTile({ label: en ? 'Clients' : 'Clientes', value: fmtNumber(perf.clientCount, I18n.lang) }),
+    statTile({ label: en ? 'Cars sold' : 'Autos vendidos', value: fmtNumber(perf.carsSold, I18n.lang), tone: 'ok' }),
+    statTile({ label: en ? 'Estimated earnings' : 'Ganancias estimadas', value: fmtMoney(perf.estimatedEarnings, { lang: I18n.lang }), tone: 'brand' }),
+    statTile({ label: en ? 'Active bids' : 'Pujas activas', value: fmtNumber(perf.activeBids, I18n.lang), tone: 'warn' })));
+
+  const won = D.bids.filter((b) => b.status === 'won');
+  if (won.length) {
+    const rows = won.map((b) => {
+      const vehicle = D.vehicles.find((v) => v.id === b.vehicleId);
+      const client = D.clients.find((c) => c.id === b.clientId);
+      return el('tr',
+        el('td', { text: vehicle ? vehicleLabel(vehicle) : b.vehicleId }),
+        el('td', { text: client ? client.name : '—' }),
+        el('td', { text: fmtMoney(b.amount, { lang: I18n.lang }) }),
+        el('td', { text: fmtDate(b.placedAt, I18n.lang, { dateStyle: 'medium' }) }));
+    });
+    wrap.append(card(en ? 'Won bids' : 'Pujas ganadas',
+      el('div.scroll-x', el('table.table',
+        el('thead', el('tr',
+          el('th', { text: en ? 'Vehicle' : 'Vehículo' }), el('th', { text: en ? 'Client' : 'Cliente' }),
+          el('th', { text: en ? 'Amount' : 'Monto' }), el('th', { text: en ? 'Date' : 'Fecha' }))),
+        el('tbody', ...rows)))));
+  }
+  return wrap;
+}
+
+function startGuidedTour() {
+  startTour([
+    {
+      title: { es: 'Bienvenido al recorrido', en: 'Welcome to the tour' },
+      body: { es: 'En unos minutos verás el flujo completo: autos, simulación de puja, costo en tiempo real, cotización en PDF y el panel del asesor.',
+              en: 'In a few minutes you will see the full flow: cars, bid simulation, real-time cost, a PDF quote and the advisor dashboard.' },
+      selector: '.side-nav',
+      before: () => goDemo('home'),
+    },
+    {
+      title: { es: 'Explora los autos', en: 'Browse the cars' },
+      body: { es: 'Cada tarjeta es un lote de ejemplo con su subasta, tipo de título y puja actual. Haz clic en "Simular puja" para continuar.',
+              en: 'Each card is a sample lot with its auction, title type and current bid. Click "Simulate a bid" to continue.' },
+      selector: '#tour-first-vehicle',
+      before: () => goDemo('autos'),
+    },
+    {
+      title: { es: 'Simula una puja', en: 'Simulate a bid' },
+      body: { es: 'Escribe un monto: se valida en tiempo real contra la puja actual y el incremento mínimo de $25.',
+              en: 'Type an amount: it is validated live against the current bid and the $25 minimum increment.' },
+      selector: '#tour-bid-input',
+      before: () => { if (!D.selectedVehicleId) D.selectedVehicleId = D.vehicles[0].id; goDemo('simulation'); },
+    },
+    {
+      title: { es: 'Costo total en vivo', en: 'Live all-in cost' },
+      body: { es: 'A la derecha, el desglose completo — comisiones, transporte, impuestos — se recalcula con cada cambio en la puja.',
+              en: 'On the right, the full breakdown — fees, transport, taxes — recalculates on every change to the bid.' },
+      selector: '.calc-out',
+    },
+    {
+      title: { es: 'Cotización en PDF', en: 'PDF quote' },
+      body: { es: 'Un clic genera un PDF real y descargable con el desglose y el total — sin ninguna librería externa.',
+              en: 'One click generates a real, downloadable PDF with the breakdown and total — with no external library.' },
+      selector: '.calc-out .btn-primary',
+    },
+    {
+      title: { es: 'Panel del asesor', en: 'Advisor dashboard' },
+      body: { es: 'Clientes totales, autos vendidos y ganancias estimadas, calculados sobre los datos de ejemplo.',
+              en: 'Total clients, cars sold and estimated earnings, computed from the sample data.' },
+      selector: '#tour-stats',
+      before: () => goDemo('reports'),
+    },
+  ]);
+}
+
 /* Exposed for tests. */
-export const _internals = { S, ingest, filteredRecords, matchesQuery };
+export const _internals = { S, ingest, filteredRecords, matchesQuery, enterDemo, getDemo: () => D };

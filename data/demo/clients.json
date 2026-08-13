@@ -1,0 +1,220 @@
+[
+  {
+    "id": "CLI-001",
+    "name": "Ana Rodríguez",
+    "phone": "+1 921 555 0555",
+    "email": "ana.rodríguez@example.com",
+    "city": "Miami",
+    "state": "FL",
+    "budget": 11000,
+    "stage": "new",
+    "priority": "hot",
+    "tags": [
+      "uber"
+    ],
+    "interestedVehicleIds": [
+      "VEH-019",
+      "VEH-008"
+    ],
+    "createdAt": "2026-08-05T15:00:00.000Z"
+  },
+  {
+    "id": "CLI-002",
+    "name": "Carlos Fernández",
+    "phone": "+1 202 555 2927",
+    "email": "carlos.fernández@example.com",
+    "city": "Houston",
+    "state": "TX",
+    "budget": 16000,
+    "stage": "contacted",
+    "priority": "cold",
+    "tags": [
+      "exportación"
+    ],
+    "interestedVehicleIds": [
+      "VEH-011"
+    ],
+    "createdAt": "2026-08-10T14:00:00.000Z"
+  },
+  {
+    "id": "CLI-003",
+    "name": "María Sánchez",
+    "phone": "+1 361 555 4058",
+    "email": "maría.sánchez@example.com",
+    "city": "Atlanta",
+    "state": "GA",
+    "budget": 15000,
+    "stage": "scheduled",
+    "priority": "hot",
+    "tags": [],
+    "interestedVehicleIds": [
+      "VEH-008",
+      "VEH-003",
+      "VEH-020"
+    ],
+    "createdAt": "2026-08-06T19:00:00.000Z"
+  },
+  {
+    "id": "CLI-004",
+    "name": "Luis Ramírez",
+    "phone": "+1 275 555 8883",
+    "email": "luis.ramírez@example.com",
+    "city": "Newark",
+    "state": "NJ",
+    "budget": 26000,
+    "stage": "requirements",
+    "priority": "cold",
+    "tags": [
+      "exportación"
+    ],
+    "interestedVehicleIds": [
+      "VEH-002"
+    ],
+    "createdAt": "2026-08-08T18:00:00.000Z"
+  },
+  {
+    "id": "CLI-005",
+    "name": "Elena Rodríguez",
+    "phone": "+1 848 555 1577",
+    "email": "elena.rodríguez@example.com",
+    "city": "Los Angeles",
+    "state": "CA",
+    "budget": 28000,
+    "stage": "searching",
+    "priority": "hot",
+    "tags": [
+      "urgente"
+    ],
+    "interestedVehicleIds": [
+      "VEH-019"
+    ],
+    "createdAt": "2026-08-09T19:00:00.000Z"
+  },
+  {
+    "id": "CLI-006",
+    "name": "Jorge Fernández",
+    "phone": "+1 800 555 4060",
+    "email": "jorge.fernández@example.com",
+    "city": "Charlotte",
+    "state": "NC",
+    "budget": 30000,
+    "stage": "offers",
+    "priority": "cold",
+    "tags": [
+      "urgente"
+    ],
+    "interestedVehicleIds": [
+      "VEH-020"
+    ],
+    "createdAt": "2026-08-06T15:00:00.000Z"
+  },
+  {
+    "id": "CLI-007",
+    "name": "Patricia Sánchez",
+    "phone": "+1 840 555 2886",
+    "email": "patricia.sánchez@example.com",
+    "city": "Phoenix",
+    "state": "AZ",
+    "budget": 8000,
+    "stage": "bidding",
+    "priority": "cold",
+    "tags": [
+      "exportación"
+    ],
+    "interestedVehicleIds": [
+      "VEH-016",
+      "VEH-015"
+    ],
+    "createdAt": "2026-08-02T11:00:00.000Z"
+  },
+  {
+    "id": "CLI-008",
+    "name": "Roberto Ramírez",
+    "phone": "+1 598 555 1836",
+    "email": "roberto.ramírez@example.com",
+    "city": "Chicago",
+    "state": "IL",
+    "budget": 6000,
+    "stage": "won",
+    "priority": "warm",
+    "tags": [],
+    "interestedVehicleIds": [
+      "VEH-021",
+      "VEH-017"
+    ],
+    "createdAt": "2026-08-02T19:00:00.000Z"
+  },
+  {
+    "id": "CLI-009",
+    "name": "Daniela Rodríguez",
+    "phone": "+1 719 555 4279",
+    "email": "daniela.rodríguez@example.com",
+    "city": "Orlando",
+    "state": "FL",
+    "budget": 6000,
+    "stage": "delivered",
+    "priority": "warm",
+    "tags": [],
+    "interestedVehicleIds": [
+      "VEH-005"
+    ],
+    "createdAt": "2026-08-01T17:00:00.000Z"
+  },
+  {
+    "id": "CLI-010",
+    "name": "Fernando Fernández",
+    "phone": "+1 931 555 7589",
+    "email": "fernando.fernández@example.com",
+    "city": "Tampa",
+    "state": "FL",
+    "budget": 20000,
+    "stage": "lost",
+    "priority": "cold",
+    "tags": [
+      "uber"
+    ],
+    "interestedVehicleIds": [
+      "VEH-009"
+    ],
+    "createdAt": "2026-08-01T14:00:00.000Z"
+  },
+  {
+    "id": "CLI-011",
+    "name": "Sofía Sánchez",
+    "phone": "+1 951 555 9679",
+    "email": "sofía.sánchez@example.com",
+    "city": "Miami",
+    "state": "FL",
+    "budget": 8000,
+    "stage": "new",
+    "priority": "cold",
+    "tags": [
+      "exportación"
+    ],
+    "interestedVehicleIds": [
+      "VEH-019",
+      "VEH-024",
+      "VEH-015"
+    ],
+    "createdAt": "2026-08-11T19:00:00.000Z"
+  },
+  {
+    "id": "CLI-012",
+    "name": "Miguel Ramírez",
+    "phone": "+1 801 555 6010",
+    "email": "miguel.ramírez@example.com",
+    "city": "Houston",
+    "state": "TX",
+    "budget": 30000,
+    "stage": "contacted",
+    "priority": "hot",
+    "tags": [
+      "uber"
+    ],
+    "interestedVehicleIds": [
+      "VEH-007",
+      "VEH-001"
+    ],
+    "createdAt": "2026-08-02T14:00:00.000Z"
+  }
+]
