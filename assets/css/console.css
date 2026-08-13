@@ -466,3 +466,72 @@
   border: 1px dashed var(--border-strong);
   word-break: break-all;
 }
+
+/* =========================================================================
+   Demo mode — entry banner + isolated shell chrome
+   ========================================================================= */
+.demo-entry {
+  display: flex; flex-direction: column; gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-5);
+  border-radius: var(--r-lg);
+  background: var(--brand-soft);
+  border: 1px solid color-mix(in srgb, var(--brand) 40%, transparent);
+  text-align: center;
+}
+.demo-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--r-full);
+  background: var(--brand);
+  color: var(--brand-ink, #fff);
+  font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+}
+.demo-badge svg { width: 13px; height: 13px; }
+.demo-exit { position: sticky; top: 0; z-index: 60; }
+
+/* ---- Autos (vehicle browser) ---------------------------------------------- */
+.vehicle-grid { display: grid; gap: var(--sp-4); grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+.vehicle-card {
+  display: flex; flex-direction: column; gap: var(--sp-2);
+  padding: var(--sp-4);
+  border-radius: var(--r-lg);
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  transition: border-color 150ms var(--ease), transform 150ms var(--ease);
+}
+.vehicle-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+.vehicle-thumb { font-size: 2.4rem; line-height: 1; }
+.vehicle-title { font-weight: 700; font-size: var(--fs-lg); }
+.vehicle-meta { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.vehicle-price-row { display: flex; align-items: baseline; justify-content: space-between; margin-top: auto; }
+.vehicle-price-row .price { font-size: var(--fs-xl); font-weight: 800; }
+
+/* ---- Simulación (bid simulator) -------------------------------------------- */
+.sim-grid { display: grid; gap: var(--sp-5); grid-template-columns: minmax(280px, 380px) 1fr; align-items: start; }
+@media (max-width: 860px) { .sim-grid { grid-template-columns: 1fr; } }
+.sim-bid-row { display: flex; align-items: center; gap: var(--sp-3); }
+.sim-bid-row .input { font-size: var(--fs-lg); font-weight: 700; }
+.sim-result { padding: var(--sp-3); border-radius: var(--r-md); border: 1px solid var(--border); background: var(--bg-inset); }
+.sim-result.ok { border-color: color-mix(in srgb, var(--ok) 45%, transparent); background: var(--ok-soft); }
+.sim-result.warn { border-color: color-mix(in srgb, var(--danger) 45%, transparent); background: var(--danger-soft); }
+
+/* =========================================================================
+   Guided tour — spotlight + tooltip overlay
+   ========================================================================= */
+.tour-host { position: fixed; inset: 0; z-index: 980; pointer-events: none; }
+.tour-scrim { position: absolute; inset: 0; background: rgba(7, 12, 22, 0.55); pointer-events: auto; }
+.tour-spot {
+  position: absolute;
+  border-radius: var(--r-md);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand) 60%, transparent), 0 0 0 3000px rgba(7, 12, 22, 0.55);
+  pointer-events: none;
+  transition: top 220ms var(--ease), left 220ms var(--ease), width 220ms var(--ease), height 220ms var(--ease);
+}
+.tour-tip {
+  position: absolute;
+  width: min(340px, calc(100vw - 28px));
+  pointer-events: auto;
+  box-shadow: var(--shadow-lg);
+  animation: pop 220ms var(--ease);
+}
+.tour-tip h3 { margin: var(--sp-2) 0 var(--sp-1); font-size: var(--fs-lg); }

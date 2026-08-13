@@ -12,8 +12,10 @@
    carry no legal baggage.
    ========================================================================= */
 
+import { CONFIG } from './config.js';
+
 export const PLATFORM_GROUPS = [
-  { id: 'house', label: { es: 'La Subasta Cubana', en: 'La Subasta Cubana' }, icon: 'gavel' },
+  { id: 'house', label: { es: CONFIG.brandName, en: CONFIG.brandName }, icon: 'gavel' },
   { id: 'auctions', label: { es: 'Subastas', en: 'Auctions' }, icon: 'car' },
   { id: 'research', label: { es: 'Historial y valoración', en: 'History & valuation' }, icon: 'search' },
   { id: 'logistics', label: { es: 'Transporte', en: 'Transport' }, icon: 'route' },
@@ -33,36 +35,18 @@ export const PLATFORM_GROUPS = [
  * @property {function} [vin]      (vin) => deep link
  */
 export const PLATFORMS = [
-  /* ---- La Subasta Cubana ------------------------------------------------ */
+  /* ---- Your own site — driven by config.js, no third party involved ----- */
   {
-    id: 'lsc', name: 'La Subasta Cubana', group: 'house',
-    url: 'https://lasubastacubana.com/',
-    mark: 'LSC', color: '#D1892A', fg: '#2a1c05',
+    id: 'house-site', name: CONFIG.brandName, group: 'house',
+    url: CONFIG.siteUrl,
+    mark: (CONFIG.brandName || '?').slice(0, 3).toUpperCase(), color: '#D1892A', fg: '#2a1c05',
     desc: { es: 'Sitio principal', en: 'Main site' },
   },
   {
-    id: 'lsc-inventory', name: 'Inventario', group: 'house',
-    url: 'https://lasubastacubana.com/inventory',
-    mark: 'INV', color: '#9A5F16', fg: '#ffffff',
-    desc: { es: 'Catálogo de autos en subasta', en: 'Auction car catalogue' },
-  },
-  {
-    id: 'lsc-calc', name: 'Calculadora oficial', group: 'house',
-    url: 'https://lasubastacubana.com/calculadora',
+    id: 'house-calc', name: 'Calculadora', group: 'house',
+    url: `${CONFIG.siteUrl.replace(/\/$/, '')}/calculadora.html`,
     mark: 'CAL', color: '#8A5514', fg: '#ffffff',
-    desc: { es: 'Costos y tarifas oficiales', en: 'Official costs and fees' },
-  },
-  {
-    id: 'lsc-fees', name: 'Precios y tarifas', group: 'house',
-    url: 'https://lasubastacubana.com/precios-tarifas',
-    mark: '$', color: '#6E4310', fg: '#ffffff',
-    desc: { es: 'Tarifario vigente — contrástalo con el tuyo', en: 'Current fee schedule — check yours against it' },
-  },
-  {
-    id: 'lsc-how', name: 'Cómo comprar', group: 'house',
-    url: 'https://lasubastacubana.com/como-comprar',
-    mark: '?', color: '#5A370D', fg: '#ffffff',
-    desc: { es: 'Guía del proceso, para compartir con el cliente', en: 'Process guide, to share with the client' },
+    desc: { es: 'Costos y tarifas', en: 'Costs and fees' },
   },
 
   /* ---- Auctions ---------------------------------------------------------- */

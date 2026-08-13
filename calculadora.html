@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Calculadora de costo total · La Subasta Cubana</title>
+  <title>Calculadora de costo total · AuctionAssist</title>
   <meta name="description" content="Calcula el costo real de comprar un auto en Copart, IAA, Manheim o ACV: comisiones, gate fee, transporte, título e impuestos.">
   <meta name="theme-color" content="#f5f7fb">
   <meta name="color-scheme" content="light dark">
@@ -41,7 +41,7 @@
         <a class="brand" href="./">
           <span class="brand-mark" id="mark"></span>
           <span class="brand-text">
-            <span class="brand-name">La Subasta Cubana</span>
+            <span class="brand-name" id="brandName">AuctionAssist</span>
             <span class="brand-sub" id="sub">Calculadora</span>
           </span>
         </a>
@@ -67,7 +67,7 @@
 
     <footer class="site-foot">
       <div class="container row between wrap gap-3">
-        <span class="text-xs text-subtle">© <span id="year"></span> La Subasta Cubana</span>
+        <span class="text-xs text-subtle">© <span id="year"></span> AuctionAssist</span>
         <nav class="row gap-4">
           <a class="text-xs text-subtle" href="./">Formulario</a>
           <a class="text-xs text-subtle" href="console.html">Consola</a>
@@ -80,9 +80,11 @@
     import { I18n, Theme, icon, buildToolbar, $ } from './assets/js/core.js';
     import { calculatorPanel } from './assets/js/calculator.js';
     import { mountLauncher } from './assets/js/launcher.js';
+    import { CONFIG } from './assets/js/config.js';
 
     I18n.init(); Theme.init();
     $('#mark').append(icon('calc'));
+    $('#brandName').textContent = CONFIG.brandName;
     $('#tools').append(buildToolbar({ onLang: paint, onTheme: () => {} }).node);
     $('#year').textContent = new Date().getFullYear();
 

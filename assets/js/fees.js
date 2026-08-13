@@ -89,7 +89,7 @@ export const DEFAULT_FEES = {
     freeStorageDays: 3,
   },
 
-  /** La Subasta Cubana representation fee, tiered on final purchase price. */
+  /** Broker representation fee, tiered on final purchase price. */
   broker: {
     label: { es: 'Comisión de representación', en: 'Representation fee' },
     tiers: T([
@@ -294,7 +294,7 @@ export const LINE_LABELS = {
   environmentalFee: { es: 'Cargo ambiental', en: 'Environmental fee' },
   docFee: { es: 'Documentación de la subasta', en: 'Auction documentation' },
   tax: { es: 'Impuesto sobre la venta', en: 'Sales tax' },
-  broker: { es: 'Comisión La Subasta Cubana', en: 'La Subasta Cubana fee' },
+  broker: { es: 'Comisión del bróker', en: 'Broker fee' },
   transport: { es: 'Transporte terrestre', en: 'Ground transport' },
   paperwork: { es: 'Título, traspaso y notaría', en: 'Title, transfer & notary' },
   export: { es: 'Exportación (naviera, puerto, aduana)', en: 'Export (ocean, port, customs)' },

@@ -1,4 +1,4 @@
-# La Subasta Cubana · Centro de Asesoría
+# AuctionAssist · Centro de Asesoría
 
 Herramienta de trabajo para asesores de ventas: un **formulario dinámico** que
 levanta las necesidades del cliente y una **consola privada** donde se guardan,
@@ -13,6 +13,7 @@ que el repo puede ser público sin exponer a nadie.
 | **Formulario (cliente)** | https://pol4720.github.io/LSC/ |
 | **Consola (asesor)** | https://pol4720.github.io/LSC/console.html |
 | **Calculadora** | https://pol4720.github.io/LSC/calculadora.html |
+| **Demo interactiva** | Botón *Probar la demo interactiva* en la pantalla de la consola — sin cuenta |
 
 ---
 
@@ -54,8 +55,8 @@ que el repo puede ser público sin exponer a nadie.
 * **Menú flotante de plataformas** (botón *Plataformas*, o la tecla `P`): acceso
   en un clic a Copart, IAA, Manheim, ACV, ADESA, bid.cars, AutoAstat, SCA,
   Carfax, AutoCheck, el decodificador VIN de la NHTSA, NICB VINCheck, KBB,
-  Edmunds, Super Dispatch, Central Dispatch, FMCSA y el propio sitio de
-  La Subasta Cubana (inventario, calculadora, tarifas, cómo comprar).
+  Edmunds, Super Dispatch, Central Dispatch, FMCSA y tu propio sitio (nombre y
+  URL vienen de `config.js`).
   Con un cliente abierto los enlaces se rellenan solos con su marca y modelo, y
   si algún lote guardado trae VIN saltan directo al VIN. Clic derecho copia el
   enlace.
@@ -64,6 +65,18 @@ que el repo puede ser público sin exponer a nadie.
   creciente, bloqueo automático por inactividad, y códigos de acceso temporal
   que puedes generar, mandar por WhatsApp y revocar cuando quieras — para
   darle uso a alguien por un rato sin entregar tu contraseña real.
+
+### Demo interactiva
+
+* **Sin cuenta, sin clave, sin token.** El botón *Probar la demo interactiva*
+  (en la pantalla de configuración o de desbloqueo de la consola) carga un
+  conjunto de datos ficticio — 24 vehículos, 12 clientes, 32 pujas — y abre una
+  consola separada que nunca toca tu bóveda real ni el repositorio.
+* **Recorrido guiado.** Un tour con viñetas resalta, paso a paso, cómo explorar
+  autos, simular una puja con validación en vivo, ver el costo total
+  recalcularse en tiempo real, descargar una cotización en PDF real (sin
+  librerías externas) y revisar el panel de desempeño del asesor.
+* **Navegación clara**: Inicio, Panel, Autos, Clientes, Simulación, Reportes.
 
 ---
 
@@ -203,7 +216,11 @@ assets/js/
   platforms.js        catálogo de plataformas externas y enlaces profundos
   launcher.js         menú flotante de plataformas
   summary.js          resumen legible + perfil derivado
+  demo.js             datos ficticios, validación de pujas, cálculo de desempeño
+  tour.js             motor del recorrido guiado (spotlight + tooltips)
+  pdf.js              generador de PDF propio, sin librerías (cotizaciones)
 data/                 los registros cifrados
+data/demo/            vehículos, clientes y pujas ficticios de la demo
 api/ · worker/        relays opcionales para tiempo real
 scripts/              servidor local, verificaciones, índice
 tests/                unitarias + e2e

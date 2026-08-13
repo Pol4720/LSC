@@ -42,7 +42,7 @@ test('every group has at least one platform and both labels', () => {
 });
 
 test('all the platforms named in the brief are present', () => {
-  for (const id of ['copart', 'iaai', 'manheim', 'acv', 'bidcars', 'carfax', 'superdispatch', 'autoastat', 'lsc']) {
+  for (const id of ['copart', 'iaai', 'manheim', 'acv', 'bidcars', 'carfax', 'superdispatch', 'autoastat', 'house-site']) {
     assert.ok(platformById(id), `missing platform: ${id}`);
   }
   assert.equal(platformById('nope'), null);

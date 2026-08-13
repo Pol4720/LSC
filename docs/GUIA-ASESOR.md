@@ -4,6 +4,30 @@ Todo lo que necesitas para usar la herramienta, sin tecnicismos.
 
 ---
 
+## 0 · Prueba la demo antes de configurar nada
+
+Si solo quieres ver de qué se trata — o mostrárselo a alguien — no hace falta
+crear claves ni conectar el repositorio. Abre **`console.html`** y pulsa
+**Probar la demo interactiva**, tanto en la pantalla de configuración como en
+la de desbloqueo.
+
+Entras a una consola separada con datos ficticios (autos, clientes y pujas de
+ejemplo) que nunca toca tu bóveda real. Pulsa **Recorrido guiado** para un tour
+de unos cinco minutos con viñetas que te llevan paso a paso por:
+
+1. **Autos** — explorar el catálogo de ejemplo.
+2. **Simulación** — elegir un auto, escribir una puja (se valida en el momento)
+   y ver el costo total recalcularse en vivo con cada cambio.
+3. Descargar una **cotización en PDF** real, generada sin ninguna librería
+   externa.
+4. **Reportes** — el panel de desempeño del asesor: clientes, autos vendidos y
+   ganancias estimadas.
+
+**Salir de la demo** te devuelve exactamente a donde estabas — configurar tus
+claves reales o desbloquear tu consola — sin dejar ningún rastro.
+
+---
+
 ## 1 · La primera vez
 
 ### Crea tus claves
@@ -165,7 +189,7 @@ Dentro está todo lo que abres en un día de trabajo, agrupado:
 
 | Grupo | Qué hay |
 |---|---|
-| **La Subasta Cubana** | Sitio, inventario, calculadora oficial, precios y tarifas, cómo comprar |
+| **Tu sitio** | Tu página principal y tu calculadora, según lo configurado en `config.js` |
 | **Subastas** | Copart, IAA, Manheim, ACV, ADESA, bid.cars, AutoAstat, SCA |
 | **Historial y valoración** | Carfax, AutoCheck, decodificador VIN de la NHTSA, NICB VINCheck, KBB, Edmunds |
 | **Transporte** | Super Dispatch, Super Dispatch Shipper, Central Dispatch, FMCSA SAFER |

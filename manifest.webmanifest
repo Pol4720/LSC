@@ -1,6 +1,6 @@
 {
-  "name": "La Subasta Cubana · Centro de Asesoría",
-  "short_name": "LSC",
+  "name": "AuctionAssist · Centro de Asesoría",
+  "short_name": "AuctionAssist",
   "description": "Levantamiento de necesidades y gestión de clientes para asesores de subastas de autos.",
   "start_url": "./",
   "scope": "./",

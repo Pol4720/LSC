@@ -84,7 +84,7 @@ export const STEPS = [
       },
       {
         id: 'contact.city', type: 'text',
-        label: { es: 'Ciudad', en: 'City' }, placeholder: { es: 'Hialeah, Miami…', en: 'Hialeah, Miami…' },
+        label: { es: 'Ciudad', en: 'City' }, placeholder: { es: 'Tu ciudad…', en: 'Your city…' },
         autocomplete: 'address-level2', width: 'half',
       },
       {
@@ -713,7 +713,7 @@ export const STEPS = [
     fields: [
       {
         id: 'consent.dataUse', type: 'switch', required: true, express: true,
-        label: { es: 'Autorizo a La Subasta Cubana a usar estos datos para asesorarme y buscar vehículos.', en: 'I authorise La Subasta Cubana to use this data to advise me and search for vehicles.' },
+        label: { es: 'Autorizo el uso de estos datos para asesorarme y buscar vehículos.', en: 'I authorise the use of this data to advise me and search for vehicles.' },
         validate: (v) => (v === true ? null : 'err.required'),
       },
       {

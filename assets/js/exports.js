@@ -8,6 +8,7 @@ import { deepGet, fmtDate, fmtNumber } from './core.js';
 import { allFields } from './schema.js';
 import { formatValue, summarize, headline, deriveProfile, toMarkdown, toPlainText } from './summary.js';
 import { PIPELINE_STAGES, byId } from './catalogs.js';
+import { CONFIG } from './config.js';
 
 /* ----------------------------------------------------------------- CSV --- */
 export function csvEscape(v) {
@@ -96,7 +97,7 @@ export function toVCard(record, lang = 'es') {
     'BEGIN:VCARD', 'VERSION:3.0',
     `N:${esc(last)};${esc(first)};;;`,
     `FN:${esc(name)}`,
-    'ORG:La Subasta Cubana',
+    `ORG:${esc(CONFIG.brandName)}`,
     phone ? `TEL;TYPE=CELL:${esc(phone)}` : '',
     email ? `EMAIL;TYPE=INTERNET:${esc(email)}` : '',
     (city || stateCode) ? `ADR;TYPE=HOME:;;;${esc(city)};${esc(stateCode)};;USA` : '',
@@ -115,14 +116,14 @@ export function toVCards(records, lang = 'es') {
 export function toICal(events, lang = 'es') {
   const stamp = (d) => new Date(d).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
   const lines = [
-    'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//La Subasta Cubana//LSC//ES', 'CALSCALE:GREGORIAN',
+    'BEGIN:VCALENDAR', 'VERSION:2.0', `PRODID:-//${CONFIG.brandName}//AuctionAssist//ES`, 'CALSCALE:GREGORIAN',
   ];
   for (const e of events) {
     const start = new Date(e.start);
     const end = new Date(e.end || start.getTime() + 45 * 60000);
     lines.push(
       'BEGIN:VEVENT',
-      `UID:${e.id}@lasubastacubana`,
+      `UID:${e.id}@auctionassist.local`,
       `DTSTAMP:${stamp(new Date())}`,
       `DTSTART:${stamp(start)}`,
       `DTEND:${stamp(end)}`,
@@ -142,7 +143,7 @@ export { toMarkdown, toPlainText };
 export function toMarkdownAll(records, lang = 'es') {
   const en = lang === 'en';
   const head = [
-    `# ${en ? 'Client portfolio' : 'Cartera de clientes'} · La Subasta Cubana`,
+    `# ${en ? 'Client portfolio' : 'Cartera de clientes'} · ${CONFIG.brandName}`,
     '',
     `${en ? 'Exported' : 'Exportado'}: ${fmtDate(new Date().toISOString(), lang, { dateStyle: 'full', timeStyle: 'short' })}  `,
     `${en ? 'Records' : 'Registros'}: **${records.length}**`,
@@ -202,7 +203,7 @@ export function toPrintableHtml(record, lang = 'es') {
   </div>
 </header>
 ${sections}
-<footer>La Subasta Cubana · ${en ? 'Confidential client intake' : 'Levantamiento confidencial de cliente'}</footer>
+<footer>${esc(CONFIG.brandName)} · ${en ? 'Confidential client intake' : 'Levantamiento confidencial de cliente'}</footer>
 </body></html>`;
 }
 

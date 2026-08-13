@@ -115,25 +115,51 @@ more than the convenience.
 | `exports.js` | CSV, JSON, vCard, iCal, Markdown, print HTML | `core`, `schema`, `summary` |
 | `charts.js` | inline-SVG dashboard charts | `core` |
 | `calculator.js` | shared cost panel UI | `core`, `catalogs`, `fees` |
+| `pdf.js` | hand-written PDF 1.4 writer (no library) + the quote layout | — |
+| `demo.js` | fictional dataset loader, bid validation, cost/earnings helpers | `catalogs`, `fees` |
+| `tour.js` | spotlight-and-tooltip guided tour engine | `core` |
 | `form.js` | the wizard | most of the above |
-| `console.js` | the CRM | most of the above |
+| `console.js` | the CRM, and the interactive demo shell | most of the above |
 | `config.js` | deployment constants | — |
 
 No cycles. Every leaf module is importable in Node, which is why the unit tests
 need no DOM.
 
+## Demo mode
+
+`console.js` also renders a second, isolated shell — reachable from the lock
+and first-run setup screens with one click, no key pair and no GitHub token.
+It loads three fictional JSON datasets (`data/demo/{vehicles,clients,bids}.json`,
+generated once and committed) into an in-memory object that never touches the
+real vault, IndexedDB records or the repository. `demo.js` holds the pure
+logic (bid validation, the leading-bid rule, the earnings estimate); `tour.js`
+is a small dependency-free spotlight/tooltip engine that drives a click
+through the whole flow — browse a car, simulate a bid, watch the shared cost
+engine (`fees.js`) recompute live, generate a PDF quote, check the advisor
+dashboard.
+
+The PDF quote (`pdf.js`) hand-writes the PDF 1.4 object model — catalog, pages,
+a Helvetica text stream, its own cross-reference table — directly to bytes.
+No `jsPDF`, no CDN, no build step: consistent with the project's zero-dependency
+stance, and small enough (one file, no embedded fonts needed because Helvetica
+is one of the 14 standard PDF fonts) that vendoring a third-party library would
+have cost more than it saved.
+
 ## Testing strategy
 
-**Unit tests (`node --test`, 127)** cover everything that is pure: the fee
+**Unit tests (`node --test`, 165)** cover everything that is pure: the fee
 engine's monotonicity and its inverse solver, the crypto round-trip and its
 failure modes, validation across every field type, CSV/vCard/iCal shape,
-schema invariants, i18n fallback.
+schema invariants, i18n fallback, the demo dataset's shape and bid rules, and
+the generated PDF's byte structure (encoding, pagination, escaping).
 
-**End-to-end tests (Playwright, 62 across desktop and mobile)** cover what only a
+**End-to-end tests (Playwright, 114 across desktop and mobile)** cover what only a
 browser can prove: that a client can actually complete the form, that a reload
 restores the draft, that a conditional field appears, that the submitted payload
 contains no plaintext, that the advisor's passphrase gates access, that a share
-link decrypts into a client card, that a CSV downloads with the right content.
+link decrypts into a client card, that a CSV downloads with the right content,
+and that the demo runs its full try-everything flow — including a real PDF
+download — without ever writing to the real vault.
 
 **Static checks (`scripts/check.mjs`)** cover the class of bug neither catches: a
 dangling import, a 404'd asset reference, a schema field missing its English

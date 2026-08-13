@@ -303,7 +303,7 @@ test('the platform launcher opens, filters and links out', async ({ page }) => {
   // Every platform group and the sites named in the brief are reachable.
   await expect(page.locator('.launcher-group')).toHaveCount(4);
   for (const name of ['Copart', 'IAA (IAAI)', 'Manheim', 'ACV Auctions',
-                      'bid.cars', 'AutoAstat', 'Carfax', 'Super Dispatch', 'La Subasta Cubana']) {
+                      'bid.cars', 'AutoAstat', 'Carfax', 'Super Dispatch', 'AuctionAssist']) {
     await expect(page.locator('.launcher-name', { hasText: name }).first()).toBeVisible();
   }
 

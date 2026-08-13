@@ -11,6 +11,7 @@
 
 import { el, clear, icon, I18n, L, t, norm, fuzzyScore, copyText, toast } from './core.js';
 import { PLATFORMS, PLATFORM_GROUPS, contextualUrl } from './platforms.js';
+import { CONFIG } from './config.js';
 
 let host = null;
 let panel = null;
@@ -115,7 +116,7 @@ function buildPanel() {
       el('div.stack.gap-1',
         el('strong', { text: label() }),
         el('span.text-xs.text-subtle', {
-          text: en ? 'Everything La Subasta Cubana works with' : 'Todo lo que se usa en La Subasta Cubana',
+          text: en ? `Everything ${CONFIG.brandName} works with` : `Todo lo que se usa en ${CONFIG.brandName}`,
         })),
       el('button.btn.btn-ghost.btn-icon.btn-sm', {
         type: 'button', 'aria-label': t('common.close'), onclick: () => toggle(false),
