@@ -5,7 +5,7 @@
   "presupuesto": 15000,
   "oferta_maxima": 11950.0,
   "veredicto": "VIABLE",
-  "explicacion": "Tu presupuesto sí alcanza para un RAV4 2019-2024 con menos de 100,000 millas, y sí alcanza en título limpio: hoy mismo hay una unidad real que cumple exactamente lo que buscas, la tienes abajo con fotos. Lo que cambia es el ritmo: el inventario de título limpio en ese perfil se mueve rápido, así que la ventaja real de activar la asesoría es tener a alguien monitoreándolo todos los días durante tu proceso — para no perder la unidad correcta cuando aparezca. Y si en algún momento te abres a un salvage con daño leve (tu segunda opción, sin bolsas ni daño estructural), el margen se amplía todavía más: hoy mismo hay varias unidades reales y bastante más baratas, que dejan espacio de sobra dentro de tus $15,000.",
+  "explicacion": "Tu presupuesto sí alcanza para un RAV4 2019-2024 con menos de 100,000 millas, y sí alcanza en título limpio: hoy mismo hay una unidad real que cumple exactamente lo que buscas, la tienes abajo con fotos. El inventario de título limpio en ese perfil se mueve rápido, así que la ventaja real de activar la asesoría es tener a alguien monitoreándolo todos los días durante tu proceso — para no perder la unidad correcta cuando aparezca. Y si en algún momento te abres a un salvage con daño leve (tu segunda opción, sin bolsas ni daño estructural), el margen se amplía todavía más.",
   "desglose": {
     "escenario": {
       "oferta": 11950.0,
@@ -48,6 +48,7 @@
       "No incluye costos oficiales del DMV, cargos de Tag Agency, verificacion de VIN, almacenaje en la subasta, reparaciones ni seguro."
     ]
   },
+  "comparables_vendidos": [],
   "alternativas": [
     "Con título limpio: tu techo real de oferta es de aproximadamente $11,950 (con el carro ya en Florida, que es el caso de la unidad de abajo). Activar el servicio te da monitoreo diario para no perder unidades como esta cuando salen.",
     "Con salvage de daño leve (segunda opción): hoy hay unidades reales muy por debajo de ese techo, lo que deja margen para pujar con calma y no depender de una sola oportunidad."
@@ -61,7 +62,7 @@
       "odometro": 38301,
       "ubicacion": "Florida (en el estado)",
       "transporte_estimado": 500,
-      "foto_local": "/tmp/claude-0/-home-user-LSC/dba43ec0-342d-5588-af9c-41f607e2440f/scratchpad/carlos_r/salida/fotos/A_0.jpg",
+      "foto_local": "/home/user/LSC/clientes/Richard Matos/Carlos R/interno/fotos_2T3W1RFV6PW276445/A_0.jpg",
       "precio_mostrar": "<span style='font-size:11.5px'>Disponible ahora<br>sin fecha de subasta fija</span>"
     },
     {
@@ -71,8 +72,7 @@
       "titulo": "Salvage — daño leve trasero, sin bolsas, con llaves",
       "odometro": 63228,
       "ubicacion": "Pennsburg, Pensilvania",
-      "transporte_estimado": 950,
-      "foto": ""
+      "transporte_estimado": 950
     },
     {
       "anio": 2020,
@@ -82,7 +82,6 @@
       "odometro": 69986,
       "ubicacion": "Fresno, California",
       "transporte_estimado": 1300,
-      "foto": "",
       "buy_now": 7800
     }
   ]

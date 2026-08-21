@@ -27,10 +27,14 @@ El regex que extraía fotos de la ficha estaba desactualizado (el CDN de LSC cam
 ### Sobre "llaves"
 El #1 (título limpio) figura con `llaves: No` en la ficha. Vale la pena preguntarlo/confirmarlo en la llamada — no es descalificante pero si de verdad no tiene llaves hay que sumar el costo de llave con transponder ($200-400) y es una señal a vigilar (aunque el título es limpio, no recuperación de robo).
 
-## Vehículos vendidos como comparables (pedido del cliente/lo que pidió Richard)
-Pediste incluir comparables ya vendidos para reforzar la viabilidad — es una buena idea y coincide con lo que dice `busqueda-inventario.md` sobre usar bid.cars para calibrar precios. **No pude traerlos yo: bid.cars está bloqueado por la política de red de este entorno (egress bloqueado).** El inventario propio de lasubastacubana.com tampoco guarda histórico de vendidos, solo lotes activos — lo confirmé con `--descubrir` sobre el formulario de filtros.
+## Vehículos vendidos como comparables — SIGUE PENDIENTE, bloqueo de red no resuelto
+Es una pieza clave del entregable (se pidió dos veces) y coincide con lo que dice `busqueda-inventario.md` sobre usar bid.cars para calibrar precios. El inventario propio de lasubastacubana.com no guarda histórico de vendidos, solo lotes activos (confirmado con `--descubrir` sobre el formulario de filtros) — bid.cars es la única fuente real para esto.
 
-Acción para ti: si tienes acceso normal a internet, entra a bid.cars y busca "Toyota RAV4" 2019-2024, título limpio y salvage con daño leve, para sacar 2-3 precios de cierre reales de las últimas semanas. Eso sí lo puedes meter en la próxima versión del PDF como prueba de mercado — yo no puedo inventar esa cifra.
+**Volví a intentar después de que se agregó bid.cars a los dominios permitidos y sigue bloqueado** (`EGRESS_BLOCKED`, la conexión al dominio devuelve 403 del proxy de salida). Probé también copart.com e iaai.com directos como alternativa — igual bloqueados; este entorno solo deja pasar lo que está en la lista blanca.
+
+Mi lectura: la política de red de un entorno normalmente se aplica al crear el contenedor/sesión, no en caliente sobre una que ya está corriendo. Si el dominio se agregó y esta sesión sigue viva desde antes de ese cambio, probablemente no lo va a recoger hasta que se abra una sesión nueva sobre este mismo entorno (LSC). Por eso NO metí comparables inventados en el PDF — la sección de "Vehículos ya vendidos" quedó lista en la plantilla (`render_pdf.py`, campo `comparables_vendidos`) pero vacía, así que hoy no aparece en el documento.
+
+**Para resolverlo:** abrir una sesión nueva en el entorno LSC (no seguir en esta) y confirmar que bid.cars ya carga; si sigue bloqueado, revisar en la configuración del entorno que el dominio quedó guardado como `bid.cars` (y probablemente conviene agregar también `www.bid.cars`). En cuanto uno de los dos cargue, se completan 2-3 comparables reales (año, millaje, título, daño, precio de cierre, fecha) en el campo `comparables_vendidos` del JSON y se regenera el PDF — es un cambio de minutos.
 
 ## Para la llamada
 - Lidera con el número bueno: $15,000 totales sí alcanzan, incluso en título limpio — la unidad #1 lo prueba.
