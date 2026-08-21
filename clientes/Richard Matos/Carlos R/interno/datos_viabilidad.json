@@ -48,7 +48,21 @@
       "No incluye costos oficiales del DMV, cargos de Tag Agency, verificacion de VIN, almacenaje en la subasta, reparaciones ni seguro."
     ]
   },
-  "comparables_vendidos": [],
+  "volumen_mercado": {
+    "descripcion": "Para dar una referencia de mercado, se muestreó el inventario ACTIVO de Toyota RAV4 2019-2024 en IAAI (por año, catálogo público) más el inventario propio de La Subasta Cubana. Solo entre 2019 y 2024, IAAI tiene listadas 1,286 unidades de RAV4 (todas condiciones y millajes); La Subasta Cubana agrega hoy 41 unidades activas propias en ese mismo rango de años.",
+    "muestra_compra_inmediata": {
+      "n": 55,
+      "promedio": 10277.71,
+      "mediana": 9800,
+      "minimo": 6700,
+      "maximo": 16150,
+      "titulo_limpio_n": 5,
+      "titulo_limpio_promedio": 12140,
+      "salvage_n": 50,
+      "salvage_promedio": 10091.48
+    },
+    "nota": "Estos son precios de Compra Inmediata de vehículos que hoy están en subasta o recién listados, no precios de venta cerrada — bid.cars (la fuente que sí tiene historial de ventas ya cerradas) bloqueó el acceso automatizado con su propio reto anti-bot, así que no se pudo traer ese dato. Aun así, la muestra sirve para calibrar el rango real de mercado: con presupuesto para ofertar hasta $11,950, tu techo cae justo en el rango medio-alto de esta muestra."
+  },
   "alternativas": [
     "Con título limpio: tu techo real de oferta es de aproximadamente $11,950 (con el carro ya en Florida, que es el caso de la unidad de abajo). Activar el servicio te da monitoreo diario para no perder unidades como esta cuando salen.",
     "Con salvage de daño leve (segunda opción): hoy hay unidades reales muy por debajo de ese techo, lo que deja margen para pujar con calma y no depender de una sola oportunidad."

@@ -22,7 +22,11 @@ Título limpio, con el vehículo real de abajo (ya en Florida): presupuesto $15,
 | 3 | 2020 RAV4 XLE | 69,986 | Salvage, daño frontal leve | Fresno, CA | $1,300 | Compra Inmediata real: $7,800 |
 
 ### Sobre las fotos (bug real que arreglé)
-El regex que extraía fotos de la ficha estaba desactualizado (el CDN de LSC cambió de patrón hace tiempo) y siempre devolvía 0 fotos — lo arreglé en `scripts/buscar_inventario.py`. Con el fix sí trae fotos reales. **El único de los 3 que tiene fotos en su ficha es el #1** (21 fotos — las miré: RAV4 roja, sin daño visible, con calcomanía de un lote de "X38,301" que coincide con el odómetro; parece un trade-in de dealer, no un siniestro de aseguradora). Los lotes #2 y #3 no tienen fotos cargadas en la ficha todavía — no es que no las busqué, genuinamente el lote no las tiene hoy. Díselo así al cliente si pregunta: "las fotos de estos dos las estamos monitoreando, en cuanto la subasta las suba las revisamos".
+El regex que extraía fotos de la ficha estaba desactualizado (el CDN de LSC cambió de patrón hace tiempo) y siempre devolvía 0 fotos — lo arreglé en `scripts/buscar_inventario.py`. Con el fix sí trae fotos reales. **El único de los 3 que tiene fotos en su ficha es el #1** (21 fotos — las miré: RAV4 roja, sin daño visible, con calcomanía de un lote de "X38,301" que coincide con el odómetro; parece un trade-in de dealer, no un siniestro de aseguradora). Los lotes #2 y #3 no tienen fotos cargadas en la ficha todavía — no es que no las busqué, genuinamente el lote no las tiene hoy. **Reconfirmado hoy** con `buscar_inventario.py --vin ... --fotos` sobre los dos VIN (`2T3H1RFV8NC197432` y `2T3W1RFV7LW102815`): siguen en `"fotos": []`. Intenté también Copart/IAAI directo por número de lote, pero esas páginas de detalle de lote dan `403` (mismo tipo de protección anti-bot que bid.cars). Díselo así al cliente si pregunta: "las fotos de estos dos las estamos monitoreando, en cuanto la subasta las suba las revisamos".
+
+Como sí seguían sin foto, cambié el marcador vacío del PDF: antes era una caja blanca sin nada (parecía un
+error de render), ahora dice explícitamente "Foto pendiente — la subasta aún no la carga en su ficha"
+(`foto_card()` en `render_pdf.py`) para que quede claro que es un estado real del lote, no un bug.
 
 ### Foto cortada en la tarjeta del PDF — RESUELTO
 La card de `.card img` forzaba `height:112px` con `object-fit:cover`, y a ese alto (con el ancho real de la
@@ -45,24 +49,37 @@ para no repetir el patrón. También el `pw.chromium.launch()` fallaba porque el
 ### Sobre "llaves"
 El #1 (título limpio) figura con `llaves: No` en la ficha. Vale la pena preguntarlo/confirmarlo en la llamada — no es descalificante pero si de verdad no tiene llaves hay que sumar el costo de llave con transponder ($200-400) y es una señal a vigilar (aunque el título es limpio, no recuperación de robo).
 
-## Vehículos vendidos como comparables — SIGUE PENDIENTE, pero ya NO es problema de red
+## Vehículos vendidos como comparables — DESCARTADO, se sustituyó por "volumen de mercado"
 
-**Se abrió una sesión nueva sobre el entorno LSC (21 ago, tarde) y el bloqueo de red de la sesión anterior ya no existe.** Confirmado con `curl`: bid.cars, copart.com e iaai.com responden ahora (antes daban `EGRESS_BLOCKED`). Esto confirma la sospecha de la sesión anterior — el cambio de dominios permitidos no se aplicaba en caliente a una sesión ya corriendo, solo a una nueva.
+**bid.cars sigue bloqueado, ya no por la red sino por su propio anti-bot.** Se abrió sesión nueva sobre el
+entorno LSC y el bloqueo de red de antes ya no existe (`curl` confirma que bid.cars, copart.com e iaai.com
+responden). Pero bid.cars devuelve un reto anti-bot de Cloudflare (`HTTP 403`, `cf-mitigated: challenge`,
+"Just a moment...") que ni `curl`, ni `WebFetch`, ni un Chromium real vía Playwright (con el proxy del
+entorno configurado explícitamente) logran pasar. Copart/IAAI directos cargan pero son SPAs sin datos en el
+HTML crudo, y su historial de vendidos está detrás de login de miembro. Con esto, y por indicación del
+cliente/asesor, **se abandonó la idea de comparables de venta cerrada.**
 
-Pero el diagnóstico real es otro, y sigue bloqueando el mismo dato:
-
-- **bid.cars**: la conexión llega, pero el sitio devuelve un reto anti-bot de Cloudflare (`HTTP 403`, header `cf-mitigated: challenge`, página "Just a moment..."). Probé con `curl`, con `WebFetch` y con un Chromium real vía Playwright (con el proxy del entorno configurado explícitamente) — los tres chocan con el mismo challenge JS, que ninguna de estas herramientas puede resolver. No es un bloqueo de nuestra red, es protección anti-scraping del propio bid.cars.
-- **copart.com / iaai.com directos**: sí cargan (HTTP 200), pero son SPAs que se renderizan del lado del cliente — el HTML crudo que se puede leer no trae los datos, solo el esqueleto de la página. Sí conseguí que IAAI mostrara **inventario activo** (ej. RAV4 2021 con millaje/título/daño/precio) en una página de catálogo SEO, pero son subastas *futuras* (fechas del 24-27 de agosto), no ventas cerradas — el campo "precio" ahí es ACV (valor estimado) o Buy Now (precio de pedida), no un precio de cierre real. Probé un parámetro `saleStatus=Sold` sin efecto: el historial de vendidos en Copart/IAAI está detrás de login de miembro, tal como ya decía `busqueda-inventario.md`.
-- Revisé también otros agregadores que aparecieron en una búsqueda web (salvagebid.com, autobidmaster.com, cars4.bid, abetter.bid) — no están en la lista de dominios permitidos de este entorno y no se intentó forzar el acceso.
-
-**Conclusión: sigue sin ser posible traer 2-3 comparables VENDIDOS reales y verificables con los medios disponibles en este entorno.** El campo `comparables_vendidos` del JSON se deja vacío (`[]`) — no se inventó ningún precio. **Nota técnica:** contrario a lo que se pensó, la plantilla (`render_pdf.py`, función `html_viabilidad`) todavía NO tiene lógica para renderizar `comparables_vendidos` — solo existe el campo vacío en el JSON como marcador de lo pendiente. Si en algún momento se consigue el dato (ej. con acceso de miembro real a Copart/IAAI, o alguien con browser autenticado copia 2-3 ventas de bid.cars a mano), hay que añadir esa sección a la plantilla además de llenar el JSON.
+**En su lugar se agregó una sección de "Volumen y disponibilidad del mercado"** (nuevo campo
+`volumen_mercado` en `datos_viabilidad.json`, nueva sección en `render_pdf.py` → `html_viabilidad`). Usa
+inventario ACTIVO (no vendido, pero real y verificable) de dos fuentes:
+- El catálogo público de IAAI por año (`iaai.com/Vehiclelisting/Toyota/Rav4/{año}`, 2019-2024): confirma
+  volumen total (1,286 RAV4 listadas en ese rango de años, todas condiciones) y aportó 50 precios de Compra
+  Inmediata reales (no ACV, que es solo valor estimado de aseguradora, no precio) de vehículos con menos de
+  100k millas.
+- El barrido propio de LSC (`inventario_barrido_rav4_2019-2024.json`, 41 unidades activas), que sumó 5
+  precios de Compra Inmediata más al mismo filtro.
+- Muestra combinada: **n=55, promedio $10,278, mediana $9,800, rango $6,700–$16,150.** Con título limpio
+  (n=5, muestra chica) el promedio sube a ~$12,140; salvage (n=50) da ~$10,091. El techo de oferta del
+  cliente ($11,950) cae en la parte media-alta de ese rango — buen dato para la llamada.
+- Está bien etiquetado en el PDF como precios de Compra Inmediata / inventario activo, **no** precios de
+  venta cerrada — para no repetir el error de mezclar "disponible" con "vendido".
 
 ## Para la llamada
 - Lidera con el número bueno: $15,000 totales sí alcanzan, incluso en título limpio — la unidad #1 lo prueba.
 - El mensaje no es "renuncia a título limpio", es "el título limpio en este rango se mueve rápido, por eso conviene tener a alguien buscando todos los días" — eso es literalmente lo que vende la asesoría.
 - El salvage no es un plan B triste: el #3 cuesta menos de $8,000 de Compra Inmediata y deja mucho margen dentro del presupuesto.
+- Nuevo: usa la sección de volumen de mercado del PDF (n=55, promedio $10,278) para mostrar que el techo de $11,950 no es una cifra al azar — está bien plantado dentro del rango real de lo que se pide por estos vehículos hoy.
 - Confirmar antes de la llamada: mecanismo de compra del #1 (sin fecha de subasta), estado real del cliente (para afinar impuesto/transporte si su destino final no es Florida).
-- Los comparables de vendidos siguen sin conseguirse (bid.cars bloquea con anti-bot, Copart/IAAI esconden el histórico detrás de login) — si necesitas cifras de referencia para la llamada, tendrías que sacarlas tú a mano desde un navegador con sesión, no algo que se pudo automatizar hoy.
 
 ## Objeción probable
 "¿Por qué solo $11,950 si tengo $15,000?" → porque el presupuesto es el costo total: oferta + tarifa de subasta + tarifa LSC ($799) + impuesto (7%) + titulación (~$355) + transporte (varía según dónde esté el carro, por eso el PDF ya no usa un número plano). El desglose completo está en el PDF que se le envía.
