@@ -1,0 +1,427 @@
+{
+  "generado": "21 de agosto de 2026, tarde (para sesion del 22 ago)",
+  "criterio_busqueda": "buscar_inventario.py --marca toyota --modelo rav4 --anio-min 2019 --anio-max 2024 --odometro-max 100000 --paginas 6 --limite 100  (56 lotes bajados, 11 tras filtro local de millaje; se revisaron fichas de los 11 para traccion/version)",
+  "rav4_awd_candidatos": [
+    {
+      "vin": "2T3P1RFV6RW411754",
+      "anio": 2024,
+      "version": "XLE",
+      "traccion": "AWD",
+      "combustible": "GAS",
+      "titulo": "Certificado de Salvamento - Robado",
+      "dano_primario": "Parte delantera",
+      "vendedor": "State Farm Insurance",
+      "ubicacion": "Lawrenceburg(KY)",
+      "odometro": 34588,
+      "fecha_subasta": "2026-08-26 10:00",
+      "dias_para_subasta": 4,
+      "llaves": "YES",
+      "run_and_drive": true,
+      "millas_a_fl": 700,
+      "titulo_costeo": "Salvage",
+      "costeo": {
+        "viable": true,
+        "presupuesto": 15000.0,
+        "oferta_maxima": 11775.0,
+        "detalle": {
+          "escenario": {
+            "oferta": 11775.0,
+            "subasta": "COPART",
+            "titulo": "Salvage",
+            "estado": "FL",
+            "financiado": false,
+            "gestiona_chapa": false,
+            "tipo_chapa": "renovacion",
+            "contrata_transporte": true,
+            "pago_transportista": 700.0,
+            "tarifa_subasta_manual": null
+          },
+          "subasta": {
+            "oferta_maxima": 11775.0,
+            "tarifa_subasta": 329.7,
+            "tarifa_subasta_estimada": true,
+            "tarifa_lsc": 799
+          },
+          "impuesto": {
+            "tasa_pct": 7.0,
+            "monto": 903.26
+          },
+          "titulacion": {
+            "traspaso_titulo": 125,
+            "envio_documentos": 20,
+            "certificacion_titulo": 210,
+            "transferencia_chapa": "NO APLICA",
+            "subtotal": 355.0
+          },
+          "transporte": {
+            "coordinacion": 120,
+            "transportista": 700.0,
+            "subtotal": 820.0
+          },
+          "total": 14981.96,
+          "deposito_seguridad_minimo": 2247.29,
+          "avisos": [
+            "La tarifa de subasta es ESTIMADA. Confirmar en la calculadora de LSC antes de dar una cifra final al cliente.",
+            "Titulo salvage/junk: solo se transfiere el titulo. La registracion la completa el cliente en la Tag Agency tras pasar inspeccion.",
+            "No incluye costos oficiales del DMV, cargos de Tag Agency, verificacion de VIN, almacenaje en la subasta, reparaciones ni seguro."
+          ]
+        },
+        "holgura": 18.04,
+        "avisos": [
+          "La tarifa de subasta es ESTIMADA. Confirmar en la calculadora de LSC antes de dar una cifra final al cliente.",
+          "Titulo salvage/junk: solo se transfiere el titulo. La registracion la completa el cliente en la Tag Agency tras pasar inspeccion.",
+          "No incluye costos oficiales del DMV, cargos de Tag Agency, verificacion de VIN, almacenaje en la subasta, reparaciones ni seguro."
+        ]
+      }
+    },
+    {
+      "vin": "4T3LWRFV6RU144258",
+      "anio": 2024,
+      "version": "LE",
+      "traccion": "AWD",
+      "combustible": "ELECTRIC AND GAS HYBRID",
+      "titulo": "Título Limpio - Recuperación de Robo",
+      "dano_primario": "Parte trasera",
+      "vendedor": "TOYOTA FINANCIAL SERVICES",
+      "ubicacion": "Brookhaven(NY)",
+      "odometro": 18557,
+      "fecha_subasta": "2026-08-27 12:00",
+      "dias_para_subasta": 5,
+      "llaves": "YES",
+      "run_and_drive": true,
+      "millas_a_fl": 1150,
+      "titulo_costeo": "Título Limpio",
+      "costeo": {
+        "viable": true,
+        "presupuesto": 15000.0,
+        "oferta_maxima": 11550.0,
+        "detalle": {
+          "escenario": {
+            "oferta": 11550.0,
+            "subasta": "COPART",
+            "titulo": "Título Limpio",
+            "estado": "FL",
+            "financiado": false,
+            "gestiona_chapa": false,
+            "tipo_chapa": "renovacion",
+            "contrata_transporte": true,
+            "pago_transportista": 950.0,
+            "tarifa_subasta_manual": null
+          },
+          "subasta": {
+            "oferta_maxima": 11550.0,
+            "tarifa_subasta": 323.4,
+            "tarifa_subasta_estimada": true,
+            "tarifa_lsc": 799
+          },
+          "impuesto": {
+            "tasa_pct": 7.0,
+            "monto": 887.07
+          },
+          "titulacion": {
+            "traspaso_titulo": 125,
+            "envio_documentos": 20,
+            "certificacion_titulo": 210,
+            "transferencia_chapa": "NO APLICA",
+            "subtotal": 355.0
+          },
+          "transporte": {
+            "coordinacion": 120,
+            "transportista": 950.0,
+            "subtotal": 1070.0
+          },
+          "total": 14984.47,
+          "deposito_seguridad_minimo": 2247.67,
+          "avisos": [
+            "La tarifa de subasta es ESTIMADA. Confirmar en la calculadora de LSC antes de dar una cifra final al cliente.",
+            "No incluye costos oficiales del DMV, cargos de Tag Agency, verificacion de VIN, almacenaje en la subasta, reparaciones ni seguro."
+          ]
+        },
+        "holgura": 15.53,
+        "avisos": [
+          "La tarifa de subasta es ESTIMADA. Confirmar en la calculadora de LSC antes de dar una cifra final al cliente.",
+          "No incluye costos oficiales del DMV, cargos de Tag Agency, verificacion de VIN, almacenaje en la subasta, reparaciones ni seguro."
+        ]
+      }
+    },
+    {
+      "vin": "4T3E6RFV6MU055999",
+      "anio": 2021,
+      "version": "XSE HV",
+      "traccion": "AWD",
+      "combustible": "ELECTRIC AND GAS HYBRID",
+      "titulo": "Certificado de Salvamento - Colisión/Accidente",
+      "dano_primario": "Parte delantera",
+      "vendedor": "State Farm Insurance",
+      "ubicacion": "Lebanon(TN)",
+      "odometro": 55526,
+      "fecha_subasta": "2026-08-24 13:00",
+      "dias_para_subasta": 2,
+      "llaves": "YES",
+      "run_and_drive": true,
+      "millas_a_fl": 650,
+      "titulo_costeo": "Salvage",
+      "costeo": {
+        "viable": true,
+        "presupuesto": 15000.0,
+        "oferta_maxima": 11775.0,
+        "detalle": {
+          "escenario": {
+            "oferta": 11775.0,
+            "subasta": "COPART",
+            "titulo": "Salvage",
+            "estado": "FL",
+            "financiado": false,
+            "gestiona_chapa": false,
+            "tipo_chapa": "renovacion",
+            "contrata_transporte": true,
+            "pago_transportista": 700.0,
+            "tarifa_subasta_manual": null
+          },
+          "subasta": {
+            "oferta_maxima": 11775.0,
+            "tarifa_subasta": 329.7,
+            "tarifa_subasta_estimada": true,
+            "tarifa_lsc": 799
+          },
+          "impuesto": {
+            "tasa_pct": 7.0,
+            "monto": 903.26
+          },
+          "titulacion": {
+            "traspaso_titulo": 125,
+            "envio_documentos": 20,
+            "certificacion_titulo": 210,
+            "transferencia_chapa": "NO APLICA",
+            "subtotal": 355.0
+          },
+          "transporte": {
+            "coordinacion": 120,
+            "transportista": 700.0,
+            "subtotal": 820.0
+          },
+          "total": 14981.96,
+          "deposito_seguridad_minimo": 2247.29,
+          "avisos": [
+            "La tarifa de subasta es ESTIMADA. Confirmar en la calculadora de LSC antes de dar una cifra final al cliente.",
+            "Titulo salvage/junk: solo se transfiere el titulo. La registracion la completa el cliente en la Tag Agency tras pasar inspeccion.",
+            "No incluye costos oficiales del DMV, cargos de Tag Agency, verificacion de VIN, almacenaje en la subasta, reparaciones ni seguro."
+          ]
+        },
+        "holgura": 18.04,
+        "avisos": [
+          "La tarifa de subasta es ESTIMADA. Confirmar en la calculadora de LSC antes de dar una cifra final al cliente.",
+          "Titulo salvage/junk: solo se transfiere el titulo. La registracion la completa el cliente en la Tag Agency tras pasar inspeccion.",
+          "No incluye costos oficiales del DMV, cargos de Tag Agency, verificacion de VIN, almacenaje en la subasta, reparaciones ni seguro."
+        ]
+      }
+    },
+    {
+      "vin": "4T3B6RFV7MU058428",
+      "anio": 2021,
+      "version": "XLE Premium HV",
+      "traccion": "AWD",
+      "combustible": "ELECTRIC AND GAS HYBRID",
+      "titulo": "Certificado de Salvamento - Robado",
+      "dano_primario": "Parte delantera",
+      "vendedor": "No especificado",
+      "ubicacion": "Theodore(AL)",
+      "odometro": 70208,
+      "fecha_subasta": "2026-08-25 13:00",
+      "dias_para_subasta": 3,
+      "llaves": "YES",
+      "run_and_drive": true,
+      "millas_a_fl": 530,
+      "titulo_costeo": "Salvage",
+      "costeo": {
+        "viable": true,
+        "presupuesto": 15000.0,
+        "oferta_maxima": 11775.0,
+        "detalle": {
+          "escenario": {
+            "oferta": 11775.0,
+            "subasta": "COPART",
+            "titulo": "Salvage",
+            "estado": "FL",
+            "financiado": false,
+            "gestiona_chapa": false,
+            "tipo_chapa": "renovacion",
+            "contrata_transporte": true,
+            "pago_transportista": 700.0,
+            "tarifa_subasta_manual": null
+          },
+          "subasta": {
+            "oferta_maxima": 11775.0,
+            "tarifa_subasta": 329.7,
+            "tarifa_subasta_estimada": true,
+            "tarifa_lsc": 799
+          },
+          "impuesto": {
+            "tasa_pct": 7.0,
+            "monto": 903.26
+          },
+          "titulacion": {
+            "traspaso_titulo": 125,
+            "envio_documentos": 20,
+            "certificacion_titulo": 210,
+            "transferencia_chapa": "NO APLICA",
+            "subtotal": 355.0
+          },
+          "transporte": {
+            "coordinacion": 120,
+            "transportista": 700.0,
+            "subtotal": 820.0
+          },
+          "total": 14981.96,
+          "deposito_seguridad_minimo": 2247.29,
+          "avisos": [
+            "La tarifa de subasta es ESTIMADA. Confirmar en la calculadora de LSC antes de dar una cifra final al cliente.",
+            "Titulo salvage/junk: solo se transfiere el titulo. La registracion la completa el cliente en la Tag Agency tras pasar inspeccion.",
+            "No incluye costos oficiales del DMV, cargos de Tag Agency, verificacion de VIN, almacenaje en la subasta, reparaciones ni seguro."
+          ]
+        },
+        "holgura": 18.04,
+        "avisos": [
+          "La tarifa de subasta es ESTIMADA. Confirmar en la calculadora de LSC antes de dar una cifra final al cliente.",
+          "Titulo salvage/junk: solo se transfiere el titulo. La registracion la completa el cliente en la Tag Agency tras pasar inspeccion.",
+          "No incluye costos oficiales del DMV, cargos de Tag Agency, verificacion de VIN, almacenaje en la subasta, reparaciones ni seguro."
+        ]
+      }
+    },
+    {
+      "vin": "2T3N1RFV0KW082854",
+      "anio": 2019,
+      "version": "Limited",
+      "traccion": "AWD",
+      "combustible": "GAS",
+      "titulo": "Certificado de Salvamento - Robado",
+      "dano_primario": "Parte delantera",
+      "vendedor": "State Farm Insurance",
+      "ubicacion": "Littleton(CO)",
+      "odometro": 63216,
+      "fecha_subasta": "2026-08-24 14:00",
+      "dias_para_subasta": 2,
+      "llaves": "YES",
+      "run_and_drive": true,
+      "millas_a_fl": 1900,
+      "titulo_costeo": "Salvage",
+      "costeo": {
+        "viable": true,
+        "presupuesto": 15000.0,
+        "oferta_maxima": 11225.0,
+        "detalle": {
+          "escenario": {
+            "oferta": 11225.0,
+            "subasta": "COPART",
+            "titulo": "Salvage",
+            "estado": "FL",
+            "financiado": false,
+            "gestiona_chapa": false,
+            "tipo_chapa": "renovacion",
+            "contrata_transporte": true,
+            "pago_transportista": 1300.0,
+            "tarifa_subasta_manual": null
+          },
+          "subasta": {
+            "oferta_maxima": 11225.0,
+            "tarifa_subasta": 314.3,
+            "tarifa_subasta_estimada": true,
+            "tarifa_lsc": 799
+          },
+          "impuesto": {
+            "tasa_pct": 7.0,
+            "monto": 863.68
+          },
+          "titulacion": {
+            "traspaso_titulo": 125,
+            "envio_documentos": 20,
+            "certificacion_titulo": 210,
+            "transferencia_chapa": "NO APLICA",
+            "subtotal": 355.0
+          },
+          "transporte": {
+            "coordinacion": 120,
+            "transportista": 1300.0,
+            "subtotal": 1420.0
+          },
+          "total": 14976.98,
+          "deposito_seguridad_minimo": 2246.55,
+          "avisos": [
+            "La tarifa de subasta es ESTIMADA. Confirmar en la calculadora de LSC antes de dar una cifra final al cliente.",
+            "Titulo salvage/junk: solo se transfiere el titulo. La registracion la completa el cliente en la Tag Agency tras pasar inspeccion.",
+            "No incluye costos oficiales del DMV, cargos de Tag Agency, verificacion de VIN, almacenaje en la subasta, reparaciones ni seguro."
+          ]
+        },
+        "holgura": 23.02,
+        "avisos": [
+          "La tarifa de subasta es ESTIMADA. Confirmar en la calculadora de LSC antes de dar una cifra final al cliente.",
+          "Titulo salvage/junk: solo se transfiere el titulo. La registracion la completa el cliente en la Tag Agency tras pasar inspeccion.",
+          "No incluye costos oficiales del DMV, cargos de Tag Agency, verificacion de VIN, almacenaje en la subasta, reparaciones ni seguro."
+        ]
+      }
+    }
+  ],
+  "honda_crv_ultima_generacion": {
+    "busqueda": "buscar_inventario.py --marca honda --modelo cr-v --anio-min 2023 --anio-max 2026 --paginas 6 --limite 100",
+    "resultado": "13 lotes encontrados, ninguno viable dentro del presupuesto total de $15,000 salvo uno con titulo Rebuilt (politicamente bloqueado). Ver detalle por lote abajo.",
+    "lotes": [
+      {
+        "vin": "2HKRS3H48PH306628",
+        "anio": 2023,
+        "ubicacion": "Opa Locka(FL)",
+        "odometro": 28280,
+        "titulo": "Certificado de Salvamento - Restaurado/Constructor (Rebuilt)",
+        "buy_now": 8900.0,
+        "oferta_actual": 4800.0,
+        "fecha_subasta": "2026-08-25 10:00",
+        "nota": "EXCLUIDO por politica de empresa: titulo Rebuilt no se compra (reglas-compra.md A.2), aunque el precio calzara en presupuesto."
+      },
+      {
+        "vin": "7FARS3H76PE001299",
+        "anio": 2023,
+        "ubicacion": "Lebanon(TN)",
+        "odometro": 38844,
+        "titulo": "Certificado de Salvamento - Colision/Accidente",
+        "buy_now": 14800.0,
+        "oferta_actual": null,
+        "fecha_subasta": "2026-08-24 13:00",
+        "nota": "Buy Now por encima del techo de oferta ($11,775-11,950). No viable con el presupuesto de $15,000 total."
+      },
+      {
+        "vin": "7FARS4H26PE020784",
+        "anio": 2023,
+        "ubicacion": "Los Angeles(CA)",
+        "odometro": 58528,
+        "titulo": "Certificado de Salvamento - Colision/Accidente",
+        "buy_now": 15900.0,
+        "oferta_actual": null,
+        "fecha_subasta": "2026-08-24 15:00",
+        "nota": "Buy Now por encima del techo de oferta. No viable."
+      },
+      {
+        "vin": "5J6RS3H74PL004043",
+        "anio": 2023,
+        "ubicacion": "Sun Valley(CA)",
+        "odometro": 49521,
+        "titulo": "Certificado de Salvamento - Colision/Accidente",
+        "buy_now": 18999.0,
+        "oferta_actual": null,
+        "fecha_subasta": "2026-08-24 15:00",
+        "nota": "Buy Now por encima del techo de oferta. No viable."
+      },
+      {
+        "vin": "7FARS6H99TE108828",
+        "anio": 2026,
+        "ubicacion": "Littleton(CO)",
+        "odometro": 1184,
+        "titulo": "Certificado de Salvamento - Piezas/Chatarra",
+        "buy_now": 15800.0,
+        "oferta_actual": null,
+        "fecha_subasta": "2026-08-24 14:00",
+        "nota": "Titulo Piezas/Chatarra (parts-only, no se puede re-titular como vehiculo) ademas de no caber en presupuesto. Descartado doblemente."
+      }
+    ],
+    "conclusion": "El CR-V de ultima generacion (2023+) NO es viable hoy dentro de $15,000 totales. El Buy Now real mas barato compatible con la politica de empresa es $14,800, ya por encima del techo de oferta (~$11,775-11,950). No forzar esta opcion en la sesion salvo que el cliente suba presupuesto o se abra a un CR-V de generacion anterior (2020-2022), que no se busco todavia porque el cliente pidio especificamente 'ultima generacion'."
+  },
+  "nota_politica_rebuild": "El cliente pidio 'no descartar salvage si ha sido reparado previamente'. Interpretacion: acepta SALVAGE con reparacion de carroceria ya visible en fotos (sigue siendo titulo Salvage, categoria ya cubierta en las reglas de la empresa, puntua 8/15 en el bloque de titulo de la rubrica). Esto es DISTINTO de titulo REBUILT/RECONSTRUIDO (salvage ya recertificado por el estado) -- ese siempre esta bloqueado por politica de la empresa (reglas-compra.md, bloqueante absoluto A.2), sin importar que el cliente lo acepte. Explicar esta distincion en la llamada con el ejemplo real del CR-V 2023 Rebuilt de Opa Locka que se encontro y se descarto."
+}

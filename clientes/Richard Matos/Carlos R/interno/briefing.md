@@ -1,12 +1,22 @@
-# Briefing interno — Carlos R (pre-activación)
+# Briefing interno — Carlos R
 
-**Fecha:** 21 ago 2026 · **Asesor:** Richard Matos · **Estado:** aún NO pagó los $149
+**Fecha de activación:** 21 ago 2026 (pagó los $149) · **Asesor:** Richard Matos
+**Estado:** Asesoría ACTIVA · Sesión 1 de 5 programada para el 22 ago 2026 (día 1 de 15)
 
-## Requerimiento del cliente
+## Requerimiento del cliente (actualizado 21 ago, tarde — mensaje directo del cliente)
 - Toyota RAV4, 2019–2024, ~100k millas (menos mejor)
 - Presupuesto **total** (todo incluido): $15,000
 - Preferencia fuerte: **título limpio**
-- Aceptaría salvage/rebuilt **solo** si: daños leves cosméticos, sin bolsas desplegadas, sin daño estructural
+- **Nuevo:** priorizar tracción **AWD** y versiones más equipadas (no la base LE)
+- **Nuevo:** abierto a Honda **CR-V de última generación (2023+)** como alternativa, si alcanza el presupuesto
+- **Nuevo, con matiz importante:** no descarta título **salvage ya reparado previamente** — esto es
+  distinto de título **Rebuilt/Reconstruido**, que la política de la empresa bloquea siempre
+  (`reglas-compra.md` A.2), sin importar que el cliente lo acepte. Ver la nota completa y el
+  ejemplo real (CR-V Rebuilt descartado) en `Sesion1_Guion_Videollamada.md`.
+
+> Mensaje original del cliente (21 ago, vía Richard): *"Si puedes prioriza las Awd y versiones mas
+> equipadas, tambien puede ser una honda crv de la última generación si alcanza mi presupuesto, no
+> descartes titulos savage si han sido reparados previamente."*
 
 ## Techo real de oferta
 Título limpio, con el vehículo real de abajo (ya en Florida): presupuesto $15,000 → **oferta máxima ≈ $11,950**, costo total estimado $14,974.45. Con un salvage lejos (ej. California) el transporte sube y el techo de oferta baja un poco, pero el precio de entrada del salvage es tan bajo que igual sobra margen — ver tabla más abajo.
@@ -83,3 +93,52 @@ inventario ACTIVO (no vendido, pero real y verificable) de dos fuentes:
 
 ## Objeción probable
 "¿Por qué solo $11,950 si tengo $15,000?" → porque el presupuesto es el costo total: oferta + tarifa de subasta + tarifa LSC ($799) + impuesto (7%) + titulación (~$355) + transporte (varía según dónde esté el carro, por eso el PDF ya no usa un número plano). El desglose completo está en el PDF que se le envía.
+
+---
+
+## Sesión 1 (22 ago 2026) — post-pago, encuadre
+
+El cliente pagó los $149 el 21 ago y esa misma tarde mandó el mensaje de preferencias actualizadas
+(ver arriba). Con eso, se preparó el material completo de la Sesión 1 (protocolo de
+`proceso-asesoria.md`: encuadre, número, mecanismo — NO la selección de 3, esa es Sesión 2).
+
+**Búsqueda hecha para esta sesión** (`buscar_inventario.py`, 21 ago tarde):
+- RAV4 2019-2024, <100k millas: 56 lotes bajados, 11 tras filtro de millaje. Se revisó la ficha de
+  los 11 uno por uno (el listado no tiene filtro de tracción) y salieron **5 candidatos AWD reales**
+  con versión equipada (XLE, XLE Premium, XSE, Limited, todos AWD, 3 de ellos híbridos) — ver tabla
+  completa y costeo en `candidatos_awd_22ago.json`. Ninguno tiene fotos cargadas todavía (igual que
+  pasó con los ejemplos de la sesión anterior — patrón que se repite en lotes recién publicados).
+- Honda CR-V última generación (2023+): 13 lotes revisados, **ninguno viable** dentro de $15,000
+  totales salvo uno con título Rebuilt (bloqueado por política de empresa aunque el precio calzara).
+  Detalle completo en el mismo JSON.
+
+**Hallazgo importante para dejar claro en la llamada:** el pedido del cliente de "salvage reparado"
+NO es lo mismo que título Rebuilt. Reparado-pero-sigue-Salvage entra dentro de lo que ya se venía
+evaluando; Rebuilt sigue bloqueado siempre por política de la empresa (`reglas-compra.md` A.2), sin
+importar que el cliente lo acepte. El CR-V Rebuilt de Opa Locka (VIN 2HKRS3H48PH306628, $8,900 Buy
+Now) es el ejemplo real para explicarlo con un caso concreto.
+
+**Entregables generados hoy:**
+- `entregable-cliente/Sesion1_Bienvenida_Carlos_R.pdf` — nuevo documento de marca LSC (plantilla
+  `bienvenida` agregada a `render_pdf.py`): número, calendario de 5 sesiones/15 días, glosario
+  (salvage vs limpio vs Rebuilt, Buy Now vs pujar, DS, AS IS), perfil de búsqueda confirmado, y un
+  adelanto (no la selección formal) de los 5 candidatos AWD, con la respuesta honesta sobre el CR-V.
+- `interno/Sesion1_Guion_Videollamada.md` — guion completo de la llamada: agenda por minutos,
+  objeciones, riesgos a decir en voz alta, próximos pasos.
+- `interno/candidatos_awd_22ago.json` — los 5 candidatos AWD con costeo completo por vehículo
+  (`costeo.py reverso`, transporte estimado por millas reales al estado del cliente) y los 5 lotes
+  de CR-V revisados con la razón de descarte de cada uno.
+- `interno/Sesion1_Enlaces_y_Logistica.md` — enlaces a GitHub de cada entregable, plantilla del
+  evento de Google Meet (no se pudo crear un link real — este entorno no tiene conector de
+  Calendar/Meet, así que el asesor lo crea a mano con el texto ya redactado), y un mensaje de
+  WhatsApp listo para pegar.
+
+**Pendientes reales, sin resolver, que hay que cerrar antes o durante la sesión:**
+1. **Contacto del cliente (correo/teléfono) no está en ningún archivo del expediente.** No se pudo
+   generar la invitación de Meet ni el envío del mensaje sin esto — pedirlo apenas se pueda.
+2. **Estado real del cliente sigue sin confirmar.** Todos los techos de oferta de hoy (igual que en
+   el diagnóstico pre-pago) asumen destino Florida. Si el cliente vive en otro estado, hay que
+   re-costear antes de la Sesión 2.
+3. Los 5 candidatos AWD no tienen Carfax ni fotos — normal para Sesión 1, pero hay que revalidarlos
+   (precios y disponibilidad cambian a diario) antes de usarlos en la Sesión 2, no reutilizar estos
+   datos tal cual.

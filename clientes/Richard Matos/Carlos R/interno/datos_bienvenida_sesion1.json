@@ -1,0 +1,77 @@
+{
+  "cliente": "Carlos R",
+  "fecha": "22 de agosto de 2026",
+  "asesor": "Richard Matos",
+  "presupuesto": 15000,
+  "oferta_maxima_limpio": 11950.0,
+  "intro": "Ya activaste tu asesoría — bienvenido. En esta primera sesión fijamos el número real con el que vamos a trabajar, te explicamos cómo funciona el proceso paso a paso, y confirmamos el perfil de búsqueda con los ajustes que nos diste: prioridad a tracción AWD y versiones más equipadas, Honda CR-V de última generación como alternativa si entra en presupuesto, y apertura a título salvage ya reparado (no confundir con título Rebuilt, que la política de La Subasta Cubana no compra bajo ninguna circunstancia — te lo explicamos abajo).",
+  "calendario": [
+    {"sesion": 1, "titulo": "Encuadre", "ventana": "22 ago (hoy)", "objetivo": "El número, cómo funciona el proceso, tu perfil confirmado"},
+    {"sesion": 2, "titulo": "Primera selección", "ventana": "24–26 ago", "objetivo": "3 vehículos reales con costo total y fecha de subasta"},
+    {"sesion": 3, "titulo": "Selección afinada", "ventana": "27–30 ago", "objetivo": "3 vehículos ajustados a tu reacción + Carfax del favorito"},
+    {"sesion": 4, "titulo": "Decisión y estrategia", "ventana": "31 ago–3 sep", "objetivo": "Oferta máxima fijada, acuerdo firmado, depósito de seguridad"},
+    {"sesion": 5, "titulo": "Cierre", "ventana": "4–6 sep", "objetivo": "Resultado de la subasta y siguientes pasos"}
+  ],
+  "incluye": [
+    "5 sesiones personalizadas por Google Meet durante 15 días",
+    "Acceso a subastas privadas de dealer: Manheim, ACV, Adesa",
+    "Análisis del historial del vehículo (accidentes, mantenimiento, dueños, millaje) a partir de la ficha de subasta y las imágenes del lote",
+    "Reporte Carfax del vehículo que quieras revisar a fondo",
+    "Recomendación de cuánto ofertar para aumentar tu probabilidad de ganar"
+  ],
+  "glosario": [
+    {"termino": "Título limpio", "explicacion": "El vehículo nunca fue declarado pérdida total. Es la opción más tranquila y la que más rápido se revende."},
+    {"termino": "Salvage (Certificado de Salvamento)", "explicacion": "La aseguradora lo declaró pérdida total y aún no ha sido reparado ni recertificado. Cuesta menos, pero tú (o tu mecánico) asumen la reparación pendiente si la hay."},
+    {"termino": "Salvage ya reparado", "explicacion": "Mismo título salvage, pero alguien ya hizo el trabajo de carrocería/mecánica antes de subastarlo — es válido dentro de tu perfil si el daño y la reparación se ven coherentes en las fotos."},
+    {"termino": "Título Rebuilt / Reconstruido", "explicacion": "Un salvage que YA pasó la recertificación estatal y volvió a circular legalmente. Suena parecido a 'salvage reparado', pero es otra categoría de título — y la política de La Subasta Cubana no compra vehículos con título Rebuilt, sin excepción."},
+    {"termino": "Buy Now / Compra Inmediata", "explicacion": "Precio cerrado, se compra al instante sin pujar. Es la opción que preferimos cuando existe: certeza total."},
+    {"termino": "Pujar en subasta", "explicacion": "Vas subiendo la oferta contra otros compradores hasta un techo que fijamos juntos. Nunca se puja por encima de ese techo."},
+    {"termino": "Depósito de Seguridad (DS)", "explicacion": "Lo que aseguras antes de pujar. Si ganamos el carro y decides no seguir, el DS no se devuelve."},
+    {"termino": "AS IS", "explicacion": "El carro se compra tal como está. Analizamos historial, ficha e imágenes del lote, pero nadie lo prueba en carretera antes de comprarlo."}
+  ],
+  "perfil_actualizado": {
+    "Vehículo principal": "Toyota RAV4 2019–2024, menos de 100,000 millas",
+    "Alternativa evaluada": "Honda CR-V de última generación (2023 en adelante)",
+    "Prioridad de equipamiento": "Tracción AWD y versiones más equipadas (XLE, XLE Premium, Limited, Adventure, híbridas) por encima de la versión base LE",
+    "Título": "Prioriza título limpio; acepta salvage con daño leve — incluido salvage ya reparado — siempre que no haya bolsas desplegadas ni daño estructural. No se ofrecen títulos Rebuilt, es política de la empresa.",
+    "Presupuesto total": "$15,000, incluye vehículo + todas las tarifas + transporte hasta su destino"
+  },
+  "nota_extra": "Sobre el Honda CR-V: sí lo buscamos. Hoy no hay una unidad de última generación (2023+) que quepa en tu presupuesto total — los Compra Inmediata reales que encontramos van de $14,800 a $18,999, muy por encima de tu techo de oferta. La única unidad barata que apareció ($8,900) tiene título Rebuilt/Reconstruido — por política de la empresa no se puede ofrecer, aunque el precio sí calzara. Seguimos monitoreando CR-V a diario por si aparece algo distinto; mientras tanto el RAV4 AWD es donde está el volumen real dentro de tu presupuesto.",
+  "candidatos_preview": [
+    {
+      "anio": 2024, "marca": "Toyota", "modelo": "RAV4", "version": "XLE AWD",
+      "titulo": "Salvage — pérdida total por robo recuperado, con llaves, listo para arrancar (Run & Drive)",
+      "odometro": 34588, "ubicacion": "Lawrenceburg, Kentucky", "traccion": "Tracción AWD",
+      "techo_oferta": 11775.0
+    },
+    {
+      "anio": 2024, "marca": "Toyota", "modelo": "RAV4", "version": "LE Híbrida AWD",
+      "titulo": "Título limpio — recuperación de robo, con llaves, Run & Drive",
+      "odometro": 18557, "ubicacion": "Brookhaven, Nueva York", "traccion": "Tracción AWD",
+      "techo_oferta": 11550.0
+    },
+    {
+      "anio": 2021, "marca": "Toyota", "modelo": "RAV4", "version": "XSE Híbrida AWD",
+      "titulo": "Salvage — daño frontal por colisión, con llaves, Run & Drive",
+      "odometro": 55526, "ubicacion": "Lebanon, Tennessee", "traccion": "Tracción AWD",
+      "techo_oferta": 11775.0
+    },
+    {
+      "anio": 2021, "marca": "Toyota", "modelo": "RAV4", "version": "XLE Premium Híbrida AWD",
+      "titulo": "Salvage — pérdida total por robo recuperado, con llaves, Run & Drive",
+      "odometro": 70208, "ubicacion": "Theodore, Alabama", "traccion": "Tracción AWD",
+      "techo_oferta": 11775.0
+    },
+    {
+      "anio": 2019, "marca": "Toyota", "modelo": "RAV4", "version": "Limited AWD",
+      "titulo": "Salvage — pérdida total por robo recuperado, con llaves, Run & Drive",
+      "odometro": 63216, "ubicacion": "Littleton, Colorado", "traccion": "Tracción AWD",
+      "techo_oferta": 11225.0
+    }
+  ],
+  "avisos_clave": [
+    "El depósito no se devuelve si ganamos el carro y decides no seguir.",
+    "El almacenaje lo pagas tú desde el día que se gana la subasta, aunque nosotros coordinemos el transporte.",
+    "El carro se compra AS IS: como está. Analizamos historial, ficha e imágenes, pero nadie lo prueba en carretera antes."
+  ]
+}
