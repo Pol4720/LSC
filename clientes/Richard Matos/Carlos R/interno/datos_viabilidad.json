@@ -1,0 +1,90 @@
+{
+  "cliente": "Carlos R",
+  "fecha": "21 de agosto de 2026",
+  "asesor": "Richard Matos",
+  "presupuesto": 15000,
+  "oferta_maxima": 11775.0,
+  "veredicto": "VIABLE CON AJUSTES",
+  "explicacion": "Con transporte estimado y titulo limpio, tu techo real de oferta en subasta ronda los $11,775 (no los $15,000 -- ese es el total con todo incluido). En ese techo, con menos de 100k millas, titulo limpio tiene poco inventario disponible hoy mismo: la unidad real que encontramos en ese perfil todavia no tiene ofertas activas, asi que no hay precio de cierre que mostrarte todavia. Bajando a salvage con dano leve (frontal o trasero, sin bolsas desplegadas, con llaves y Run & Drive) si hay varias unidades reales disponibles y con buen margen dentro de tu presupuesto -- exactamente el tipo de salvage que definiste como aceptable.",
+  "desglose": {
+    "escenario": {
+      "oferta": 11775.0,
+      "subasta": "COPART",
+      "titulo": "Título Limpio",
+      "estado": "FL",
+      "financiado": false,
+      "gestiona_chapa": false,
+      "tipo_chapa": "renovacion",
+      "contrata_transporte": true,
+      "pago_transportista": 700.0,
+      "tarifa_subasta_manual": null
+    },
+    "subasta": {
+      "oferta_maxima": 11775.0,
+      "tarifa_subasta": 329.7,
+      "tarifa_subasta_estimada": true,
+      "tarifa_lsc": 799
+    },
+    "impuesto": {
+      "tasa_pct": 7.0,
+      "monto": 903.26
+    },
+    "titulacion": {
+      "traspaso_titulo": 125,
+      "envio_documentos": 20,
+      "certificacion_titulo": 210,
+      "transferencia_chapa": "NO APLICA",
+      "subtotal": 355.0
+    },
+    "transporte": {
+      "coordinacion": 120,
+      "transportista": 700.0,
+      "subtotal": 820.0
+    },
+    "total": 14981.96,
+    "deposito_seguridad_minimo": 2247.29,
+    "avisos": [
+      "La tarifa de subasta es ESTIMADA. Confirmar en la calculadora de LSC antes de dar una cifra final al cliente.",
+      "No incluye costos oficiales del DMV, cargos de Tag Agency, verificacion de VIN, almacenaje en la subasta, reparaciones ni seguro."
+    ]
+  },
+  "alternativas": [
+    "Si priorizas titulo limpio sobre todo: activar el servicio ahora te permite monitorear el inventario a diario -- las unidades de titulo limpio en RAV4 2019-2024 bajo 100k millas rotan rapido y aparecen nuevas cada semana.",
+    "Si te abres a salvage con dano leve (tu segunda opcion, sin bolsas ni dano estructural): hoy mismo hay 2-3 unidades reales en ese perfil, con margen para pujar por debajo del Buy Now."
+  ],
+  "ejemplos": [
+    {
+      "anio": 2023,
+      "marca": "Toyota",
+      "modelo": "RAV4 XLE",
+      "titulo": "Titulo limpio (sin ofertas activas aun)",
+      "odometro": 38301,
+      "buy_now": null,
+      "oferta_actual": null,
+      "ubicacion": "Florida",
+      "foto": ""
+    },
+    {
+      "anio": 2022,
+      "marca": "Toyota",
+      "modelo": "RAV4 LE",
+      "titulo": "Salvage - dano trasero leve",
+      "odometro": 63228,
+      "buy_now": null,
+      "oferta_actual": 175,
+      "ubicacion": "Pennsburg, PA",
+      "foto": ""
+    },
+    {
+      "anio": 2020,
+      "marca": "Toyota",
+      "modelo": "RAV4 XLE",
+      "titulo": "Salvage - dano frontal, Compra Inmediata",
+      "odometro": 69986,
+      "buy_now": 7800,
+      "oferta_actual": 80,
+      "ubicacion": "Fresno, CA",
+      "foto": ""
+    }
+  ]
+}
