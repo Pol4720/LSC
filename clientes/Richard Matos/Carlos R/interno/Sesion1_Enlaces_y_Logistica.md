@@ -33,10 +33,18 @@ preguntarlo.
 
 **Para compartir con el cliente:**
 - `clientes/Richard Matos/Carlos R/entregable-cliente/Sesion1_Bienvenida_Carlos_R.pdf` — documento
-  nuevo de esta sesión: número, calendario de 5 sesiones, glosario, perfil confirmado, adelanto de
-  5 candidatos AWD, respuesta honesta sobre el CR-V.
+  nuevo de esta sesión (5 páginas): número, calendario de 5 sesiones, glosario, perfil confirmado,
+  adelanto de 5 candidatos AWD (cada uno con VIN y enlace directo al lote), respuesta honesta sobre
+  el CR-V de última generación, y un CR-V complementario de una generación anterior que sí entra en
+  presupuesto.
 - `clientes/Richard Matos/Carlos R/entregable-cliente/Diagnostico_Viabilidad_Carlos_R.pdf` — el de
-  la sesión pre-pago, sigue siendo válido como respaldo del número.
+  la sesión pre-pago (3 páginas), sigue siendo válido como respaldo del número. También trae VIN y
+  enlace en cada tarjeta.
+
+**Nota técnica:** ambos PDF se regeneraron el 21 de agosto por la noche para corregir un bug real de
+márgenes (las páginas que desbordaban una hoja perdían el margen superior en la continuación) y para
+agregar VIN + enlace clicable a cada vehículo. El asesor puede abrir esos enlaces en vivo durante la
+llamada para que el cliente vea la ficha real del lote.
 
 **Para ti (interno, no se le manda al cliente):**
 - `clientes/Richard Matos/Carlos R/interno/Sesion1_Guion_Videollamada.md` — guion completo con

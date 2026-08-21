@@ -421,7 +421,40 @@
         "nota": "Titulo Piezas/Chatarra (parts-only, no se puede re-titular como vehiculo) ademas de no caber en presupuesto. Descartado doblemente."
       }
     ],
-    "conclusion": "El CR-V de ultima generacion (2023+) NO es viable hoy dentro de $15,000 totales. El Buy Now real mas barato compatible con la politica de empresa es $14,800, ya por encima del techo de oferta (~$11,775-11,950). No forzar esta opcion en la sesion salvo que el cliente suba presupuesto o se abra a un CR-V de generacion anterior (2020-2022), que no se busco todavia porque el cliente pidio especificamente 'ultima generacion'."
+    "conclusion": "El CR-V de última generación (2023+) NO es viable hoy dentro de $15,000 totales. El Buy Now real más barato compatible con la política de empresa es $14,800, ya por encima del techo de oferta (~$11,775-11,950)."
+  },
+  "honda_crv_generacion_anterior": {
+    "busqueda": "buscar_inventario.py --marca honda --modelo cr-v --anio-min 2020 --anio-max 2022 --odometro-max 100000 --paginas 6 --limite 100 --buy-now  (tras el mensaje del cliente del 21 ago pidiendo explícitamente 'la generación más avanzada que quede dentro de su presupuesto', se amplió la búsqueda a generaciones anteriores)",
+    "resultado": "Solo 2 lotes con Compra Inmediata en 2020-2022 hoy. Se descartó el de Arlington(WA) por daño de FUEGO (riesgo eléctrico/interior alto, no es 'daño leve'). El de York Haven(PA) sí califica.",
+    "elegido": {
+      "vin": "2HKRW2H84LH620790",
+      "anio": 2020,
+      "version": "EX-L",
+      "traccion": "AWD",
+      "combustible": "GAS",
+      "titulo": "Certificado de Salvamento - Colisión/Accidente",
+      "ubicacion": "York Haven(PA)",
+      "odometro": 69448,
+      "llaves": "YES",
+      "run_and_drive": true,
+      "buy_now": 9000,
+      "url": "https://lasubastacubana.com/inventory-vdp/vin-2HKRW2H84LH620790",
+      "costeo": {
+        "comando": "costeo.py directo --oferta 9000 --estado FL --titulo Salvage --millas 950",
+        "total": 11822.57,
+        "deposito_seguridad_minimo": 1773.39
+      }
+    },
+    "descartado": {
+      "vin": "5J6RW2H86LA010956",
+      "anio": 2020,
+      "ubicacion": "Arlington(WA)",
+      "odometro": 20191,
+      "titulo": "Certificado de Salvamento - Daño por Fuego",
+      "buy_now": 9900,
+      "razon_descarte": "Daño por fuego: riesgo eléctrico y de interior, no clasifica como daño leve del perfil del cliente. Requeriría aceptación explícita de riesgo si se quisiera igual presentar."
+    },
+    "conclusion": "Es la generación más avanzada de CR-V que sí entra en presupuesto hoy: 2020, versión EX-L (bien equipada), AWD, con costo total estimado de $11,822.57 — deja margen dentro de los $15,000. Se agregó como complemento en el PDF de bienvenida."
   },
   "nota_politica_rebuild": "El cliente pidio 'no descartar salvage si ha sido reparado previamente'. Interpretacion: acepta SALVAGE con reparacion de carroceria ya visible en fotos (sigue siendo titulo Salvage, categoria ya cubierta en las reglas de la empresa, puntua 8/15 en el bloque de titulo de la rubrica). Esto es DISTINTO de titulo REBUILT/RECONSTRUIDO (salvage ya recertificado por el estado) -- ese siempre esta bloqueado por politica de la empresa (reglas-compra.md, bloqueante absoluto A.2), sin importar que el cliente lo acepte. Explicar esta distincion en la llamada con el ejemplo real del CR-V 2023 Rebuilt de Opa Locka que se encontro y se descarto."
 }

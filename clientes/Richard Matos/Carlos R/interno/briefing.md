@@ -136,9 +136,51 @@ Now) es el ejemplo real para explicarlo con un caso concreto.
 **Pendientes reales, sin resolver, que hay que cerrar antes o durante la sesión:**
 1. **Contacto del cliente (correo/teléfono) no está en ningún archivo del expediente.** No se pudo
    generar la invitación de Meet ni el envío del mensaje sin esto — pedirlo apenas se pueda.
-2. **Estado real del cliente sigue sin confirmar.** Todos los techos de oferta de hoy (igual que en
-   el diagnóstico pre-pago) asumen destino Florida. Si el cliente vive en otro estado, hay que
-   re-costear antes de la Sesión 2.
-3. Los 5 candidatos AWD no tienen Carfax ni fotos — normal para Sesión 1, pero hay que revalidarlos
+2. Los 5 candidatos AWD no tienen Carfax ni fotos — normal para Sesión 1, pero hay que revalidarlos
    (precios y disponibilidad cambian a diario) antes de usarlos en la Sesión 2, no reutilizar estos
    datos tal cual.
+
+---
+
+## Ajustes del 21 ago (noche) — mensaje directo del cliente sobre logística
+
+El cliente escribió de nuevo: vive en **Nebraska**, pero puede recibir el vehículo en **Florida** si
+eso abarata el transporte — "no es un problema" optimizar por ubicación salvo que el transporte sea
+un gasto elevado. Con esto se cierra el pendiente de "estado real del cliente": los cálculos siguen
+usando Florida como destino (ya era así) porque sigue siendo la opción más barata para los
+candidatos actuales; si en el futuro conviene enviar algo directo a Nebraska, se re-costea ese caso
+puntual.
+
+El cliente también pidió, en el mismo mensaje: **ortografía perfecta con tildes**, arreglar los
+**márgenes** de los PDF (se estaban rompiendo en las páginas que desbordaban una hoja), agregar
+**VIN y enlace directo al lote** en cada vehículo que se le muestre (para poder abrirlo en la
+llamada), y sumar un **Honda CR-V de la generación más avanzada que sí quepa en el presupuesto**
+como complemento.
+
+**Lo que se corrigió, todo en `render_pdf.py` (la skill, no solo este cliente — afecta todos los
+reportes futuros):**
+- **Márgenes:** el bug real era que las plantillas `viabilidad` y `bienvenida` armaban todo el
+  contenido en un solo `<div class="page">`; cuando el contenido pesaba más de una hoja, Chromium
+  partía la página automáticamente y la hoja de continuación perdía el margen superior (quedaba
+  pegada al borde). Se reescribieron ambas plantillas para generar explícitamente varias páginas
+  (`_pagina()` una vez por cada bloque de contenido que quepa cómodo), así cada hoja física tiene
+  siempre su propio encabezado, margen y pie. `Diagnostico_Viabilidad` pasó de 2 a 3 páginas;
+  `Sesion1_Bienvenida` de 3 a 5. Verificado leyendo ambos PDF completos, página por página.
+- **VIN y enlace al lote:** nueva función `tarjeta_vehiculo()` en `render_pdf.py`, reutilizada por
+  las tres plantillas (`viabilidad`, `bienvenida`, `seleccion`). Cada tarjeta de vehículo ahora
+  muestra el VIN completo y un enlace `Ver lote →` a `lasubastacubana.com/inventory-vdp/vin-{VIN}`
+  — clicable en el PDF, se puede abrir en vivo durante la videollamada.
+- **Ortografía:** se revisó el texto visible de `render_pdf.py` y de los `.md` internos de esta
+  sesión; ya estaba mayormente correcto, se corrigieron un par de docstrings internos
+  (`vehiculo`→`vehículo`, etc., sin efecto en lo que ve el cliente) y el docstring del módulo.
+- **CR-V complementario:** el pedido original (última generación, 2023+) sigue sin caber en
+  presupuesto — eso no cambió. Se amplió la búsqueda a la generación anterior (2020–2022) y sí
+  salió una opción real: **2020 CR-V EX-L AWD, York Haven (PA), 69,448 mi, salvage por
+  colisión/accidente, Compra Inmediata $9,000, costo total estimado $11,822.57** (VIN
+  2HKRW2H84LH620790). Se descartó un segundo lote de la misma búsqueda por daño de fuego. Se agregó
+  como sección nueva ("Complemento") al final del PDF de bienvenida, con su propia tarjeta,
+  VIN y enlace.
+
+Los tres archivos de datos (`datos_viabilidad.json`, `datos_bienvenida_sesion1.json`,
+`candidatos_awd_22ago.json`) se actualizaron con los VIN/enlaces de todos los vehículos y el nuevo
+candidato de CR-V; ambos PDF se regeneraron con `render_pdf.py`.

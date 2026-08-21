@@ -31,44 +31,64 @@
   ],
   "perfil_actualizado": {
     "Vehículo principal": "Toyota RAV4 2019–2024, menos de 100,000 millas",
-    "Alternativa evaluada": "Honda CR-V de última generación (2023 en adelante)",
+    "Alternativa evaluada": "Honda CR-V — ver el complemento al final de este documento",
     "Prioridad de equipamiento": "Tracción AWD y versiones más equipadas (XLE, XLE Premium, Limited, Adventure, híbridas) por encima de la versión base LE",
     "Título": "Prioriza título limpio; acepta salvage con daño leve — incluido salvage ya reparado — siempre que no haya bolsas desplegadas ni daño estructural. No se ofrecen títulos Rebuilt, es política de la empresa.",
-    "Presupuesto total": "$15,000, incluye vehículo + todas las tarifas + transporte hasta su destino"
+    "Presupuesto total": "$15,000, incluye vehículo + todas las tarifas + transporte hasta su destino",
+    "Ubicación": "Vives en Nebraska, pero puedes recibir el vehículo en Florida si eso abarata el transporte — no hay restricción de estado, se elige lo más barato caso por caso"
   },
-  "nota_extra": "Sobre el Honda CR-V: sí lo buscamos. Hoy no hay una unidad de última generación (2023+) que quepa en tu presupuesto total — los Compra Inmediata reales que encontramos van de $14,800 a $18,999, muy por encima de tu techo de oferta. La única unidad barata que apareció ($8,900) tiene título Rebuilt/Reconstruido — por política de la empresa no se puede ofrecer, aunque el precio sí calzara. Seguimos monitoreando CR-V a diario por si aparece algo distinto; mientras tanto el RAV4 AWD es donde está el volumen real dentro de tu presupuesto.",
+  "nota_extra": "Sobre el Honda CR-V de última generación (2023 en adelante): sí lo buscamos a fondo. Hoy no hay una unidad de esa generación que quepa en tu presupuesto total — los Compra Inmediata reales que encontramos van de $14,800 a $18,999, muy por encima de tu techo de oferta. La única unidad barata que apareció ($8,900) tiene título Rebuilt/Reconstruido — por política de la empresa no se puede ofrecer, aunque el precio sí calzara. Buena noticia: sí encontramos una unidad viable de una generación anterior del CR-V, dentro de tu presupuesto — la tienes como complemento en la última página de este documento.",
   "candidatos_preview": [
     {
       "anio": 2024, "marca": "Toyota", "modelo": "RAV4", "version": "XLE AWD",
       "titulo": "Salvage — pérdida total por robo recuperado, con llaves, listo para arrancar (Run & Drive)",
       "odometro": 34588, "ubicacion": "Lawrenceburg, Kentucky", "traccion": "Tracción AWD",
-      "techo_oferta": 11775.0
+      "techo_oferta": 11775.0,
+      "vin": "2T3P1RFV6RW411754",
+      "url": "https://lasubastacubana.com/inventory-vdp/vin-2T3P1RFV6RW411754"
     },
     {
       "anio": 2024, "marca": "Toyota", "modelo": "RAV4", "version": "LE Híbrida AWD",
       "titulo": "Título limpio — recuperación de robo, con llaves, Run & Drive",
       "odometro": 18557, "ubicacion": "Brookhaven, Nueva York", "traccion": "Tracción AWD",
-      "techo_oferta": 11550.0
+      "techo_oferta": 11550.0,
+      "vin": "4T3LWRFV6RU144258",
+      "url": "https://lasubastacubana.com/inventory-vdp/vin-4T3LWRFV6RU144258"
     },
     {
       "anio": 2021, "marca": "Toyota", "modelo": "RAV4", "version": "XSE Híbrida AWD",
       "titulo": "Salvage — daño frontal por colisión, con llaves, Run & Drive",
       "odometro": 55526, "ubicacion": "Lebanon, Tennessee", "traccion": "Tracción AWD",
-      "techo_oferta": 11775.0
+      "techo_oferta": 11775.0,
+      "vin": "4T3E6RFV6MU055999",
+      "url": "https://lasubastacubana.com/inventory-vdp/vin-4T3E6RFV6MU055999"
     },
     {
       "anio": 2021, "marca": "Toyota", "modelo": "RAV4", "version": "XLE Premium Híbrida AWD",
       "titulo": "Salvage — pérdida total por robo recuperado, con llaves, Run & Drive",
       "odometro": 70208, "ubicacion": "Theodore, Alabama", "traccion": "Tracción AWD",
-      "techo_oferta": 11775.0
+      "techo_oferta": 11775.0,
+      "vin": "4T3B6RFV7MU058428",
+      "url": "https://lasubastacubana.com/inventory-vdp/vin-4T3B6RFV7MU058428"
     },
     {
       "anio": 2019, "marca": "Toyota", "modelo": "RAV4", "version": "Limited AWD",
       "titulo": "Salvage — pérdida total por robo recuperado, con llaves, Run & Drive",
       "odometro": 63216, "ubicacion": "Littleton, Colorado", "traccion": "Tracción AWD",
-      "techo_oferta": 11225.0
+      "techo_oferta": 11225.0,
+      "vin": "2T3N1RFV0KW082854",
+      "url": "https://lasubastacubana.com/inventory-vdp/vin-2T3N1RFV0KW082854"
     }
   ],
+  "crv_complementario": {
+    "anio": 2020, "marca": "Honda", "modelo": "CR-V", "version": "EX-L AWD",
+    "titulo": "Salvage — daño por colisión/accidente, con llaves, listo para arrancar (Run & Drive)",
+    "odometro": 69448, "ubicacion": "York Haven, Pensilvania", "traccion": "Tracción AWD",
+    "buy_now": 9000,
+    "vin": "2HKRW2H84LH620790",
+    "url": "https://lasubastacubana.com/inventory-vdp/vin-2HKRW2H84LH620790",
+    "nota": "No encontramos un CR-V 2023+ dentro de presupuesto (ver nota arriba), así que revisamos generaciones anteriores. Esta es la más avanzada que sí entra: 2020, versión EX-L (bien equipada, con techo panorámico y cuero de fábrica), tracción AWD, Compra Inmediata real de $9,000. Costo total estimado con todo incluido: $11,822.57 — deja margen dentro de tus $15,000."
+  },
   "avisos_clave": [
     "El depósito no se devuelve si ganamos el carro y decides no seguir.",
     "El almacenaje lo pagas tú desde el día que se gana la subasta, aunque nosotros coordinemos el transporte.",

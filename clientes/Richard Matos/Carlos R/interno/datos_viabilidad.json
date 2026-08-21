@@ -76,6 +76,8 @@
       "odometro": 38301,
       "ubicacion": "Florida (en el estado)",
       "transporte_estimado": 500,
+      "vin": "2T3W1RFV6PW276445",
+      "url": "https://lasubastacubana.com/inventory-vdp/vin-2T3W1RFV6PW276445",
       "foto_local": "/home/user/LSC/clientes/Richard Matos/Carlos R/interno/fotos_2T3W1RFV6PW276445/A_0.jpg",
       "precio_mostrar": "<span style='font-size:11.5px'>Disponible ahora<br>sin fecha de subasta fija</span>"
     },
@@ -86,7 +88,9 @@
       "titulo": "Salvage — daño leve trasero, sin bolsas, con llaves",
       "odometro": 63228,
       "ubicacion": "Pennsburg, Pensilvania",
-      "transporte_estimado": 950
+      "transporte_estimado": 950,
+      "vin": "2T3H1RFV8NC197432",
+      "url": "https://lasubastacubana.com/inventory-vdp/vin-2T3H1RFV8NC197432"
     },
     {
       "anio": 2020,
@@ -96,7 +100,9 @@
       "odometro": 69986,
       "ubicacion": "Fresno, California",
       "transporte_estimado": 1300,
-      "buy_now": 7800
+      "buy_now": 7800,
+      "vin": "2T3W1RFV7LW102815",
+      "url": "https://lasubastacubana.com/inventory-vdp/vin-2T3W1RFV7LW102815"
     }
   ]
 }

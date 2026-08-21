@@ -37,9 +37,14 @@ tipo de título la empresa no lo compra bajo ninguna circunstancia**, aunque el 
 Usa el ejemplo real de abajo (CR-V 2023 Rebuilt de Opa Locka) para que quede claro con un caso
 concreto, no en abstracto.
 
-**Preguntas pendientes de confirmar en esta sesión** (bloquean el costeo fino):
-- Estado real donde vive/recibirá el carro (hasta ahora se ha asumido FL en los cálculos —
-  **confirmar**, cambia transporte e impuesto).
+**Ya confirmado (mensaje del cliente, 21 ago):** vive en Nebraska, pero puede recibir el vehículo en
+Florida si eso abarata el transporte — no hay restricción de estado, se elige lo más barato caso por
+caso. Todos los cálculos de esta sesión siguen usando Florida como destino porque es la opción de
+transporte más barata para los vehículos de abajo; si en algún momento aparece un candidato donde
+enviarlo directo a Nebraska salga más barato, se re-costea con `--estado NE` y se le explica la
+diferencia.
+
+**Preguntas que faltan por confirmar en esta sesión:**
 - Si financia o paga de contado.
 - Si quiere que LSC gestione transporte y chapa, o lo hace él mismo.
 
@@ -95,6 +100,10 @@ completo, con costeo y fuente, en `interno/candidatos_awd_22ago.json`.
 todavía — se confirmó lote por lote con `buscar_inventario.py --fotos`. No es que no se buscaron;
 la ficha genuinamente no las tiene hoy. Se están monitoreando a diario.
 
+**Cada tarjeta del PDF trae el VIN y un enlace "Ver lote →"** que abre la ficha real del vehículo en
+`lasubastacubana.com`. Compartir pantalla y abrir 2–3 en vivo durante la sesión — es la forma más
+rápida de que el cliente entienda qué está mirando, aunque todavía no haya fotos.
+
 **Sobre "robo recuperado" (Recuperación de Robo)** en 3 de los 5: el carro fue robado y apareció.
 Riesgo real: piezas faltantes, daño de encendido forzado. Hay que mirar el interior con lupa en
 cuanto haya fotos — pendiente explícito, no ocultarlo.
@@ -103,13 +112,21 @@ cuanto haya fotos — pendiente explícito, no ocultarlo.
 días. Si el cliente reacciona bien a alguno en esta sesión, se puede adelantar el Carfax para la
 Sesión 2 en vez de esperar a la Sesión 3.
 
-**Sobre el Honda CR-V (última generación, 2023+):** se buscó a fondo (13 lotes revisados). **No es
+**Sobre el Honda CR-V de última generación (2023+):** se buscó a fondo (13 lotes revisados). **No es
 viable hoy dentro de $15,000 totales.** El Compra Inmediata real más barato que cumple política de
 empresa es $14,800 — ya por encima del techo de oferta. Apareció uno de $8,900 que sí calzaría en
 presupuesto, pero tiene título **Rebuilt/Reconstruido** — bloqueado por política de la empresa, no
 se puede ofrecer aunque el precio sea bueno. Es el ejemplo perfecto para explicar la distinción
-Salvage-reparado vs Rebuilt del punto 1. Decirle al cliente que se sigue monitoreando el CR-V a
-diario, sin prometer que va a aparecer algo.
+Salvage-reparado vs Rebuilt del punto 1.
+
+**Como complemento, se buscó la generación anterior del CR-V** (2020–2022) para responder de verdad
+al pedido del cliente de "la generación más avanzada que quede dentro de su presupuesto". Salió una
+sola opción real: **2020 CR-V EX-L AWD, York Haven, Pensilvania, 69,448 mi, salvage por
+colisión/accidente, Compra Inmediata $9,000, costo total estimado $11,822.57** (VIN
+2HKRW2H84LH620790, con su propia tarjeta y enlace en la última página del PDF). Se descartó un
+segundo lote de la misma búsqueda por daño de fuego (riesgo eléctrico, no es "daño leve"). Preséntalo
+como complemento, no como reemplazo del RAV4 — el cliente sigue prefiriendo RAV4, esto es solo para
+que tenga el panorama completo del CR-V.
 
 ---
 
@@ -121,9 +138,11 @@ impuesto 7% + titulación (~$355) + transporte ($500–$1,300 según ubicación 
 Desglose completo en el PDF.
 
 **"¿Por qué no me buscan CR-V si lo pedí?"**
-→ Sí se buscó (13 lotes revisados). El más barato que cumple con la política de la empresa cuesta
-$14,800, fuera de presupuesto. El único dentro de presupuesto tiene título Rebuilt, que la empresa
-no compra. Seguimos monitoreando, pero hoy el volumen real está en RAV4 AWD.
+→ Sí se buscó. De última generación (2023+) el más barato que cumple con la política de la empresa
+cuesta $14,800, fuera de presupuesto — el único dentro de presupuesto tiene título Rebuilt, que la
+empresa no compra. Por eso se amplió la búsqueda a la generación anterior y sí salió una opción real
+dentro de presupuesto (2020 EX-L AWD, $9,000, costo total $11,822.57) — está en la última página del
+PDF como complemento.
 
 **"¿Un salvage reparado no es lo mismo que uno Rebuilt?"**
 → No. Reparado-pero-sigue-Salvage sí se puede comprar (ya estaba dentro de lo que aceptaba antes).
@@ -147,16 +166,17 @@ Si ya ganamos el carro y te echas atrás, no (cláusula 6.8).
 - Ninguno de los 5 tiene Carfax todavía — se pide en Sesión 2/3 sobre el favorito.
 - La tarifa de subasta en todos los cálculos es **estimada**, se confirma en la calculadora oficial
   de LSC antes de dar una cifra final de compra.
-- El estado de destino del cliente sigue sin confirmar — todos los cálculos de techo de oferta
-  asumen Florida. Si el cliente vive en otro estado, el impuesto y el transporte cambian y hay que
-  re-costear antes de la Sesión 2.
+- El cliente vive en Nebraska; todos los cálculos de esta sesión asumen destino Florida por ser el
+  más barato de transportar. Si más adelante conviene enviar un vehículo directo a Nebraska, hay que
+  re-costear ese caso puntual antes de presentarlo.
 
 ---
 
 ## Próximo paso concreto
 
-1. Confirmar estado de destino, financiamiento, y si gestiona transporte/chapa él mismo.
-2. Preguntar reacción a los 5 AWD y a la explicación del CR-V — anotar cuáles le laten más.
+1. Confirmar financiamiento y si gestiona transporte/chapa él mismo.
+2. Preguntar reacción a los 5 AWD, al CR-V 2020 EX-L y a la explicación de Rebuilt — anotar cuáles
+   le laten más.
 3. Agendar Sesión 2 dentro de la ventana 24–26 ago (según lo que reaccione mejor: si le gusta
    alguno de los que se subasta el 24, puede convenir adelantar la sesión a esa fecha).
 4. Antes de la Sesión 2: revalidar los 5 candidatos (precios/fechas cambian a diario — no
